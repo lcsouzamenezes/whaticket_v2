@@ -54,7 +54,7 @@ const UserSchema = Yup.object().shape({
 		.min(2, "Too Short!")
 		.max(50, "Too Long!")
 		.required("Required"),
-	password: Yup.string().min(5, "Too Short!").max(50, "Too Long!"),
+	password: Yup.string().min(5, "Too Short!").max(50, "Too Long!").required("Required"),
 	email: Yup.string().email("Invalid email").required("Required"),
 });
 
@@ -165,7 +165,7 @@ const SignUp = () => {
 							>
 								{i18n.t("signup.buttons.submit")}
 							</Button>
-							<Grid container justify="flex-end">
+							<Grid container justifyContent="flex-end">
 								<Grid item>
 									<Link
 										href="#"
