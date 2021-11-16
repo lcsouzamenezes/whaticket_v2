@@ -1,6 +1,6 @@
 import { join } from "path";
-import { promisify } from "util";
 import { writeFile } from "fs";
+import { promisify } from "util";
 import * as Sentry from "@sentry/node";
 
 import {
@@ -10,18 +10,19 @@ import {
   Client
 } from "whatsapp-web.js";
 
-import Contact from "../../models/Contact";
 import Ticket from "../../models/Ticket";
+import Contact from "../../models/Contact";
 import Message from "../../models/Message";
 
-import { getIO } from "../../libs/socket";
-import CreateMessageService from "../MessageServices/CreateMessageService";
-import { logger } from "../../utils/logger";
-import CreateOrUpdateContactService from "../ContactServices/CreateOrUpdateContactService";
-import FindOrCreateTicketService from "../TicketServices/FindOrCreateTicketService";
-import ShowWhatsAppService from "../WhatsappService/ShowWhatsAppService";
-import { debounce } from "../../helpers/Debounce";
 import UpdateTicketService from "../TicketServices/UpdateTicketService";
+import ShowWhatsAppService from "../WhatsappService/ShowWhatsAppService";
+import CreateMessageService from "../MessageServices/CreateMessageService";
+import FindOrCreateTicketService from "../TicketServices/FindOrCreateTicketService";
+import CreateOrUpdateContactService from "../ContactServices/CreateOrUpdateContactService";
+
+import { getIO } from "../../libs/socket";
+import { logger } from "../../utils/logger";
+import { debounce } from "../../helpers/Debounce";
 
 interface Session extends Client {
   id?: number;
@@ -231,7 +232,6 @@ const handleMessage = async (
 
     const chat = await msg.getChat();
 
-
     if (chat.isGroup) {
       let msgGroupContact;
 
@@ -249,33 +249,30 @@ const handleMessage = async (
 
     const contact = await verifyContact(msgContact);
 
-    if(unreadMessages === 0 && whatsapp.farewellMessage === msg.body) return;
+    if (unreadMessages === 0 && whatsapp.farewellMessage === msg.body) return;
 
-      const ticket = await FindOrCreateTicketService(
-        contact,
-        wbot.id!,
-        unreadMessages,
-        groupContact
-      );
+    const ticket = await FindOrCreateTicketService(
+      contact,
+      wbot.id!,
+      unreadMessages,
+      groupContact
+    );
 
-      if (msg.hasMedia) {
-        await verifyMediaMessage(msg, ticket, contact);
-      } else {
-        await verifyMessage(msg, ticket, contact);
-      }
+    if (msg.hasMedia) {
+      await verifyMediaMessage(msg, ticket, contact);
+    } else {
+      await verifyMessage(msg, ticket, contact);
+    }
 
-      if (
-        !ticket.queue &&
-        !chat.isGroup &&
-        !msg.fromMe &&
-        !ticket.userId &&
-        whatsapp.queues.length >= 1
-      ) {
-        await verifyQueue(wbot, msg, ticket, contact);
-      }
-
-
-
+    if (
+      !ticket.queue &&
+      !chat.isGroup &&
+      !msg.fromMe &&
+      !ticket.userId &&
+      whatsapp.queues.length >= 1
+    ) {
+      await verifyQueue(wbot, msg, ticket, contact);
+    }
   } catch (err) {
     Sentry.captureException(err);
     logger.error(`Error handling whatsapp message: Err: ${err}`);

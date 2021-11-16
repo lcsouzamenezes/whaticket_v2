@@ -1,5 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
-
+import React, { useState, useEffect, useRef, useContext } from "react";
 import * as Yup from "yup";
 import { Formik, Form, Field } from "formik";
 import { toast } from "react-toastify";
@@ -15,9 +14,10 @@ import {
   CircularProgress,
 } from "@material-ui/core";
 import { green } from "@material-ui/core/colors";
-import { i18n } from "../../translate/i18n";
 
 import api from "../../services/api";
+import { AuthContext } from "../../context/Auth/AuthContext";
+import { i18n } from "../../translate/i18n";
 import toastError from "../../errors/toastError";
 
 const useStyles = makeStyles((theme) => ({
@@ -73,6 +73,7 @@ const QuickAnswersModal = ({
   };
 
   const [quickAnswer, setQuickAnswer] = useState(initialState);
+  const { user } = useContext(AuthContext);
 
   useEffect(() => {
     return () => {
@@ -114,10 +115,11 @@ const QuickAnswersModal = ({
         await api.put(`/quickAnswers/${quickAnswerId}`, values);
         handleClose();
       } else {
-        const { data } = await api.post("/quickAnswers", values);
-        if (onSave) {
-          onSave(data);
-        }
+        const userId = user?.profile === "admin" ? user?.id : parseInt(user?.customer);
+        const { data } = await api.post("/quickAnswers", { ...values, userId });
+          if (onSave) {
+            onSave(data);
+          }
         handleClose();
       }
       toast.success(i18n.t("quickAnswersModal.success"));

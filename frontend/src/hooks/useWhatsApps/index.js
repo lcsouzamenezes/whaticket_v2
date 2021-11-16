@@ -1,14 +1,14 @@
-import { useState, useEffect, useReducer } from "react";
+import { useState, useEffect, useReducer, useContext } from "react";
 import openSocket from "socket.io-client";
-import toastError from "../../errors/toastError";
 
 import api from "../../services/api";
+import { AuthContext } from "../../context/Auth/AuthContext";
+import toastError from "../../errors/toastError";
 
 const reducer = (state, action) => {
 	if (action.type === "LOAD_WHATSAPPS") {
 		const whatsApps = action.payload;
-
-		return [...whatsApps];
+    		return [...whatsApps];
 	}
 
 	if (action.type === "UPDATE_WHATSAPPS") {
@@ -56,13 +56,22 @@ const reducer = (state, action) => {
 const useWhatsApps = () => {
 	const [whatsApps, dispatch] = useReducer(reducer, []);
 	const [loading, setLoading] = useState(true);
+	const { user } = useContext(AuthContext);
 
 	useEffect(() => {
 		setLoading(true);
 		const fetchSession = async () => {
 			try {
 				const { data } = await api.get("/whatsapp/");
-				dispatch({ type: "LOAD_WHATSAPPS", payload: data });
+				const whatsAppData = data.filter(allConnections => {
+					return user?.customer === "master"
+						? allConnections
+						: allConnections?.user?.id === user?.id ||
+							allConnections?.user?.name === user?.name || 
+							allConnections?.user?.email === user?.email ||
+							allConnections?.userId.toString() === user?.customer;
+				});
+				dispatch({ type: "LOAD_WHATSAPPS", payload: whatsAppData });
 				setLoading(false);
 			} catch (err) {
 				setLoading(false);
@@ -70,7 +79,7 @@ const useWhatsApps = () => {
 			}
 		};
 		fetchSession();
-	}, []);
+	}, [user.customer, user.email, user.id, user.name]);
 
 	useEffect(() => {
 		const socket = openSocket(process.env.REACT_APP_BACKEND_URL);

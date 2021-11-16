@@ -36,19 +36,19 @@ const UpdateUserService = async ({
     password: Yup.string()
   });
 
-  const { email, password, profile, name, queueIds = [] } = userData;
+  const { name, email, password, profile, queueIds = [] } = userData;
 
   try {
-    await schema.validate({ email, password, profile, name });
+    await schema.validate({ name, email, password, profile });
   } catch (err) {
     throw new AppError(err.message);
   }
 
   await user.update({
+    name,
     email,
     password,
-    profile,
-    name
+    profile
   });
 
   await user.$set("queues", queueIds);

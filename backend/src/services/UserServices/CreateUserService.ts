@@ -5,26 +5,29 @@ import { SerializeUser } from "../../helpers/SerializeUser";
 import User from "../../models/User";
 
 interface Request {
+  name: string;
   email: string;
   password: string;
-  name: string;
-  queueIds?: number[];
   profile?: string;
+  customer?: string;
+  queueIds?: number[];
 }
 
 interface Response {
-  email: string;
-  name: string;
   id: number;
+  name: string;
+  email: string;
   profile: string;
+  customer: string;
 }
 
 const CreateUserService = async ({
+  name,
   email,
   password,
-  name,
-  queueIds = [],
-  profile = "admin"
+  profile = "admin",
+  customer,
+  queueIds = []
 }: Request): Promise<Response> => {
   const schema = Yup.object().shape({
     name: Yup.string().required().min(2),
@@ -46,17 +49,18 @@ const CreateUserService = async ({
   });
 
   try {
-    await schema.validate({ email, password, name });
+    await schema.validate({ email, password, name, customer });
   } catch (err) {
     throw new AppError(err.message);
   }
 
   const user = await User.create(
     {
+      name,
       email,
       password,
-      name,
-      profile
+      profile,
+      customer
     },
     { include: ["queues"] }
   );

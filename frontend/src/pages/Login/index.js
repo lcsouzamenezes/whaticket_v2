@@ -88,7 +88,6 @@ const Login = () => {
             value={user.email}
             onChange={handleChangeInput}
             autoComplete="email"
-            autoFocus
           />
           <TextField
             variant="outlined"

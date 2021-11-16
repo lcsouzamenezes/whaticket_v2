@@ -1,13 +1,19 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
+
+import {
+	Chip, 
+	InputLabel,
+	MenuItem,
+	FormControl,
+	Select
+} from "@material-ui/core";
+
 import { makeStyles } from "@material-ui/core/styles";
-import InputLabel from "@material-ui/core/InputLabel";
-import MenuItem from "@material-ui/core/MenuItem";
-import FormControl from "@material-ui/core/FormControl";
-import Select from "@material-ui/core/Select";
-import Chip from "@material-ui/core/Chip";
-import toastError from "../../errors/toastError";
+
 import api from "../../services/api";
 import { i18n } from "../../translate/i18n";
+import { AuthContext } from "../../context/Auth/AuthContext";
+import toastError from "../../errors/toastError";
 
 const useStyles = makeStyles(theme => ({
 	chips: {
@@ -22,17 +28,23 @@ const useStyles = makeStyles(theme => ({
 const QueueSelect = ({ selectedQueueIds, onChange }) => {
 	const classes = useStyles();
 	const [queues, setQueues] = useState([]);
+	const { user } = useContext(AuthContext);
 
 	useEffect(() => {
 		(async () => {
 			try {
 				const { data } = await api.get("/queue");
-				setQueues(data);
+				const userQueue = data.filter(allqueues => {
+					return user?.customer === "master"
+						? allqueues
+						: allqueues?.userId === user?.id
+				});
+				setQueues(userQueue);
 			} catch (err) {
 				toastError(err);
 			}
 		})();
-	}, []);
+	}, [user.customer, user.id]);
 
 	const handleChange = e => {
 		onChange(e.target.value);

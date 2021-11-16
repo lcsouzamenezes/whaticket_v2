@@ -17,6 +17,8 @@ import { hash, compare } from "bcryptjs";
 import Ticket from "./Ticket";
 import Queue from "./Queue";
 import UserQueue from "./UserQueue";
+import Whatsapp from "./Whatsapp";
+import QuickAnswer from "./QuickAnswer";
 
 @Table
 class User extends Model<User> {
@@ -45,6 +47,9 @@ class User extends Model<User> {
   @Column
   profile: string;
 
+  @Column
+  customer: string;
+
   @CreatedAt
   createdAt: Date;
 
@@ -53,6 +58,15 @@ class User extends Model<User> {
 
   @HasMany(() => Ticket)
   tickets: Ticket[];
+
+  @HasMany(() => Whatsapp)
+  whatsapp: Whatsapp;
+
+  @HasMany(() => QuickAnswer)
+  quickAnswer: QuickAnswer;
+
+  @HasMany(() => Queue)
+  userQueue: Queue;
 
   @BelongsToMany(() => Queue, () => UserQueue)
   queues: Queue[];

@@ -3,45 +3,45 @@ import openSocket from "socket.io-client";
 import { toast } from "react-toastify";
 import { useHistory } from "react-router-dom";
 
-import { makeStyles } from "@material-ui/core/styles";
-import Table from "@material-ui/core/Table";
-import TableBody from "@material-ui/core/TableBody";
-import TableCell from "@material-ui/core/TableCell";
-import TableHead from "@material-ui/core/TableHead";
-import TableRow from "@material-ui/core/TableRow";
-import Paper from "@material-ui/core/Paper";
-import Button from "@material-ui/core/Button";
-import Avatar from "@material-ui/core/Avatar";
-import WhatsAppIcon from "@material-ui/icons/WhatsApp";
-import SearchIcon from "@material-ui/icons/Search";
-import TextField from "@material-ui/core/TextField";
-import InputAdornment from "@material-ui/core/InputAdornment";
+import {
+  Avatar,
+  Button,
+  Paper,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableRow,
+  TextField,
+  IconButton,
+  InputAdornment
+} from "@material-ui/core";
 
-import IconButton from "@material-ui/core/IconButton";
-import DeleteOutlineIcon from "@material-ui/icons/DeleteOutline";
-import EditIcon from "@material-ui/icons/Edit";
+import { WhatsApp, Search, DeleteOutline, Edit } from "@material-ui/icons";
+
+import { makeStyles } from "@material-ui/core/styles";
+
+import Title from "../../components/Title";
+import { Can } from "../../components/Can";
+import MainHeader from "../../components/MainHeader";
+import MainContainer from "../../components/MainContainer";
+import ContactModal from "../../components/ContactModal";
+import TableRowSkeleton from "../../components/TableRowSkeleton";
+import ConfirmationModal from "../../components/ConfirmationModal/";
+import MainHeaderButtonsWrapper from "../../components/MainHeaderButtonsWrapper";
 
 import api from "../../services/api";
-import TableRowSkeleton from "../../components/TableRowSkeleton";
-import ContactModal from "../../components/ContactModal";
-import ConfirmationModal from "../../components/ConfirmationModal/";
-
 import { i18n } from "../../translate/i18n";
-import MainHeader from "../../components/MainHeader";
-import Title from "../../components/Title";
-import MainHeaderButtonsWrapper from "../../components/MainHeaderButtonsWrapper";
-import MainContainer from "../../components/MainContainer";
 import toastError from "../../errors/toastError";
 import { AuthContext } from "../../context/Auth/AuthContext";
-import { Can } from "../../components/Can";
 
 const reducer = (state, action) => {
   if (action.type === "LOAD_CONTACTS") {
     const contacts = action.payload;
     const newContacts = [];
 
-    contacts.forEach((contact) => {
-      const contactIndex = state.findIndex((c) => c.id === contact.id);
+    contacts.forEach(contact => {
+      const contactIndex = state.findIndex(c => c.id === contact.id);
       if (contactIndex !== -1) {
         state[contactIndex] = contact;
       } else {
@@ -54,7 +54,7 @@ const reducer = (state, action) => {
 
   if (action.type === "UPDATE_CONTACTS") {
     const contact = action.payload;
-    const contactIndex = state.findIndex((c) => c.id === contact.id);
+    const contactIndex = state.findIndex(c => c.id === contact.id);
 
     if (contactIndex !== -1) {
       state[contactIndex] = contact;
@@ -67,7 +67,7 @@ const reducer = (state, action) => {
   if (action.type === "DELETE_CONTACT") {
     const contactId = action.payload;
 
-    const contactIndex = state.findIndex((c) => c.id === contactId);
+    const contactIndex = state.findIndex(c => c.id === contactId);
     if (contactIndex !== -1) {
       state.splice(contactIndex, 1);
     }
@@ -79,13 +79,13 @@ const reducer = (state, action) => {
   }
 };
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(theme => ({
   mainPaper: {
     flex: 1,
     padding: theme.spacing(1),
     overflowY: "scroll",
-    ...theme.scrollbarStyles,
-  },
+    ...theme.scrollbarStyles
+  }
 }));
 
 const Contacts = () => {
@@ -115,9 +115,16 @@ const Contacts = () => {
       const fetchContacts = async () => {
         try {
           const { data } = await api.get("/contacts/", {
-            params: { searchParam, pageNumber },
+            params: { searchParam, pageNumber }
           });
-          dispatch({ type: "LOAD_CONTACTS", payload: data.contacts });
+          const contacts = data.contacts.filter(allContacts => {
+            const userContact = allContacts?.tickets[0];
+            return user?.customer === "master"
+              ? allContacts
+              : userContact?.userId === user?.id ||
+                  userContact?.userId.toString() === user?.customer;
+          });
+          dispatch({ type: "LOAD_CONTACTS", payload: contacts });
           setHasMore(data.hasMore);
           setLoading(false);
         } catch (err) {
@@ -127,12 +134,12 @@ const Contacts = () => {
       fetchContacts();
     }, 500);
     return () => clearTimeout(delayDebounceFn);
-  }, [searchParam, pageNumber]);
+  }, [searchParam, pageNumber, user.customer, user.id, user.name, user.email]);
 
   useEffect(() => {
     const socket = openSocket(process.env.REACT_APP_BACKEND_URL);
 
-    socket.on("contact", (data) => {
+    socket.on("contact", data => {
       if (data.action === "update" || data.action === "create") {
         dispatch({ type: "UPDATE_CONTACTS", payload: data.contact });
       }
@@ -147,7 +154,7 @@ const Contacts = () => {
     };
   }, []);
 
-  const handleSearch = (event) => {
+  const handleSearch = event => {
     setSearchParam(event.target.value.toLowerCase());
   };
 
@@ -161,14 +168,16 @@ const Contacts = () => {
     setContactModalOpen(false);
   };
 
-  const handleSaveTicket = async (contactId) => {
+  const handleSaveTicket = async contactId => {
     if (!contactId) return;
     setLoading(true);
     try {
+      const userId =
+        user?.profile === "admin" ? user?.id : parseInt(user?.customer);
       const { data: ticket } = await api.post("/tickets", {
         contactId: contactId,
-        userId: user?.id,
-        status: "open",
+        userId,
+        status: "open"
       });
       history.push(`/tickets/${ticket.id}`);
     } catch (err) {
@@ -177,12 +186,12 @@ const Contacts = () => {
     setLoading(false);
   };
 
-  const hadleEditContact = (contactId) => {
+  const hadleEditContact = contactId => {
     setSelectedContactId(contactId);
     setContactModalOpen(true);
   };
 
-  const handleDeleteContact = async (contactId) => {
+  const handleDeleteContact = async contactId => {
     try {
       await api.delete(`/contacts/${contactId}`);
       toast.success(i18n.t("contacts.toasts.deleted"));
@@ -204,10 +213,10 @@ const Contacts = () => {
   };
 
   const loadMore = () => {
-    setPageNumber((prevState) => prevState + 1);
+    setPageNumber(prevState => prevState + 1);
   };
 
-  const handleScroll = (e) => {
+  const handleScroll = e => {
     if (!hasMore || loading) return;
     const { scrollTop, scrollHeight, clientHeight } = e.currentTarget;
     if (scrollHeight - (scrollTop + 100) < clientHeight) {
@@ -233,7 +242,7 @@ const Contacts = () => {
         }
         open={confirmOpen}
         onClose={setConfirmOpen}
-        onConfirm={(e) =>
+        onConfirm={e =>
           deletingContact
             ? handleDeleteContact(deletingContact.id)
             : handleimportContact()
@@ -254,15 +263,15 @@ const Contacts = () => {
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">
-                  <SearchIcon style={{ color: "gray" }} />
+                  <Search style={{ color: "gray" }} />
                 </InputAdornment>
-              ),
+              )
             }}
           />
           <Button
             variant="contained"
             color="primary"
-            onClick={(e) => setConfirmOpen(true)}
+            onClick={e => setConfirmOpen(true)}
           >
             {i18n.t("contacts.buttons.import")}
           </Button>
@@ -298,7 +307,7 @@ const Contacts = () => {
           </TableHead>
           <TableBody>
             <>
-              {contacts.map((contact) => (
+              {contacts.map(contact => (
                 <TableRow key={contact.id}>
                   <TableCell style={{ paddingRight: 0 }}>
                     {<Avatar src={contact.profilePicUrl} />}
@@ -311,13 +320,13 @@ const Contacts = () => {
                       size="small"
                       onClick={() => handleSaveTicket(contact.id)}
                     >
-                      <WhatsAppIcon />
+                      <WhatsApp />
                     </IconButton>
                     <IconButton
                       size="small"
                       onClick={() => hadleEditContact(contact.id)}
                     >
-                      <EditIcon />
+                      <Edit />
                     </IconButton>
                     <Can
                       role={user.profile}
@@ -325,12 +334,12 @@ const Contacts = () => {
                       yes={() => (
                         <IconButton
                           size="small"
-                          onClick={(e) => {
+                          onClick={e => {
                             setConfirmOpen(true);
                             setDeletingContact(contact);
                           }}
                         >
-                          <DeleteOutlineIcon />
+                          <DeleteOutline />
                         </IconButton>
                       )}
                     />
