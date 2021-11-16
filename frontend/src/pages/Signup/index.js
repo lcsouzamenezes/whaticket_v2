@@ -1,28 +1,26 @@
 import React, { useState } from "react";
+
 import * as Yup from "yup";
 import { useHistory } from "react-router-dom";
 import { Link as RouterLink } from "react-router-dom";
 import { toast } from "react-toastify";
 import { Formik, Form, Field } from "formik";
 
-import {
-	Avatar,
-	Button,
-	CssBaseline,
-	TextField,
-	Link,
-	Grid,
-	Box,
-	Typography,
-	Container
-} from "@material-ui/core";
-
+import Avatar from "@material-ui/core/Avatar";
+import Button from "@material-ui/core/Button";
+import CssBaseline from "@material-ui/core/CssBaseline";
+import TextField from "@material-ui/core/TextField";
+import Link from "@material-ui/core/Link";
+import Grid from "@material-ui/core/Grid";
+import Box from "@material-ui/core/Box";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
-
+import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
+import Container from "@material-ui/core/Container";
+
+import { i18n } from "../../translate/i18n";
 
 import api from "../../services/api";
-import { i18n } from "../../translate/i18n";
 import toastError from "../../errors/toastError";
 
 // const Copyright = () => {
@@ -63,7 +61,7 @@ const UserSchema = Yup.object().shape({
 		.min(2, "Too Short!")
 		.max(50, "Too Long!")
 		.required("Required"),
-	password: Yup.string().min(5, "Too Short!").max(50, "Too Long!").required("Required"),
+	password: Yup.string().min(5, "Too Short!").max(50, "Too Long!"),
 	email: Yup.string().email("Invalid email").required("Required")
 });
 
@@ -162,7 +160,7 @@ const SignUp = () => {
 							>
 								{i18n.t("signup.buttons.submit")}
 							</Button>
-							<Grid container justifyContent="flex-end">
+							<Grid container justify="flex-end">
 								<Grid item>
 									<Link
 										href="#"
