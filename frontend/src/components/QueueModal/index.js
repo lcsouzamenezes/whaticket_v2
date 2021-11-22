@@ -1,26 +1,30 @@
-import React, { useState, useEffect, useRef } from "react";
-
+import React, { useState, useEffect, useRef, useContext } from "react";
 import * as Yup from "yup";
 import { Formik, Form, Field } from "formik";
 import { toast } from "react-toastify";
 
+import { 
+	IconButton, 
+	InputAdornment,
+	Button,
+	TextField,
+	Dialog,
+	DialogActions,
+	DialogContent,
+	DialogTitle,
+	CircularProgress 
+} from "@material-ui/core";
+
+import { Colorize } from "@material-ui/icons";
+
 import { makeStyles } from "@material-ui/core/styles";
 import { green } from "@material-ui/core/colors";
-import Button from "@material-ui/core/Button";
-import TextField from "@material-ui/core/TextField";
-import Dialog from "@material-ui/core/Dialog";
-import DialogActions from "@material-ui/core/DialogActions";
-import DialogContent from "@material-ui/core/DialogContent";
-import DialogTitle from "@material-ui/core/DialogTitle";
-import CircularProgress from "@material-ui/core/CircularProgress";
-
-import { i18n } from "../../translate/i18n";
 
 import api from "../../services/api";
-import toastError from "../../errors/toastError";
 import ColorPicker from "../ColorPicker";
-import { IconButton, InputAdornment } from "@material-ui/core";
-import { Colorize } from "@material-ui/icons";
+import { i18n } from "../../translate/i18n";
+import toastError from "../../errors/toastError";
+import { AuthContext } from "../../context/Auth/AuthContext";
 
 const useStyles = makeStyles(theme => ({
 	root: {
@@ -31,11 +35,9 @@ const useStyles = makeStyles(theme => ({
 		marginRight: theme.spacing(1),
 		flex: 1,
 	},
-
 	btnWrapper: {
 		position: "relative",
 	},
-
 	buttonProgress: {
 		color: green[500],
 		position: "absolute",
@@ -75,7 +77,8 @@ const QueueModal = ({ open, onClose, queueId }) => {
 	const [colorPickerModalOpen, setColorPickerModalOpen] = useState(false);
 	const [queue, setQueue] = useState(initialState);
 	const greetingRef = useRef();
-
+	const { user } = useContext(AuthContext);
+	
 	useEffect(() => {
 		(async () => {
 			if (!queueId) return;
@@ -108,7 +111,8 @@ const QueueModal = ({ open, onClose, queueId }) => {
 			if (queueId) {
 				await api.put(`/queue/${queueId}`, values);
 			} else {
-				await api.post("/queue", values);
+				const userId = user?.profile === "admin" ? user?.id : parseInt(user?.customer);
+				await api.post("/queue", {...values, userId});
 			}
 			toast.success("Queue saved successfully");
 			handleClose();

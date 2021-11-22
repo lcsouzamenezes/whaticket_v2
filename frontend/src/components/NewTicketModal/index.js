@@ -70,9 +70,10 @@ const NewTicketModal = ({ modalOpen, onClose }) => {
 		if (!contactId) return;
 		setLoading(true);
 		try {
+			const userId = user?.profile === "admin" ? user?.id : parseInt(user?.customer);
 			const { data: ticket } = await api.post("/tickets", {
 				contactId: contactId,
-				userId: user.id,
+				userId,
 				status: "open",
 			});
 			history.push(`/tickets/${ticket.id}`);

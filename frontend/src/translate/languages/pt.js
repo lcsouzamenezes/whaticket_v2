@@ -273,7 +273,6 @@ const messages = {
           queues: "Filas",
           administration: "Administração",
           users: "Usuários",
-          settings: "Configurações",
         },
         appBar: {
           user: {
@@ -343,19 +342,6 @@ const messages = {
           deleteTitle: "Excluir",
           deleteMessage:
             "Todos os dados do usuário serão perdidos. Os tickets abertos deste usuário serão movidos para a fila.",
-        },
-      },
-      settings: {
-        success: "Configurações salvas com sucesso.",
-        title: "Configurações",
-        settings: {
-          userCreation: {
-            name: "Criação de usuário",
-            options: {
-              enabled: "Ativado",
-              disabled: "Desativado",
-            },
-          },
         },
       },
       messagesList: {

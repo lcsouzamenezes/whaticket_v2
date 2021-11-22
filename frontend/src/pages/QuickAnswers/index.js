@@ -1,4 +1,5 @@
-import React, { useState, useEffect, useReducer } from "react";
+import React, { useState, useEffect, useReducer, useContext } from "react";
+import { toast } from "react-toastify";
 import openSocket from "socket.io-client";
 
 import {
@@ -12,23 +13,23 @@ import {
   TableHead,
   TableRow,
   InputAdornment,
-  TextField,
+  TextField
 } from "@material-ui/core";
-import { Edit, DeleteOutline } from "@material-ui/icons";
-import SearchIcon from "@material-ui/icons/Search";
 
-import MainContainer from "../../components/MainContainer";
-import MainHeader from "../../components/MainHeader";
-import MainHeaderButtonsWrapper from "../../components/MainHeaderButtonsWrapper";
+import { Edit, DeleteOutline, Search } from "@material-ui/icons";
+
 import Title from "../../components/Title";
-
-import api from "../../services/api";
-import { i18n } from "../../translate/i18n";
+import MainHeader from "../../components/MainHeader";
+import MainContainer from "../../components/MainContainer";
 import TableRowSkeleton from "../../components/TableRowSkeleton";
 import QuickAnswersModal from "../../components/QuickAnswersModal";
 import ConfirmationModal from "../../components/ConfirmationModal";
-import { toast } from "react-toastify";
+import MainHeaderButtonsWrapper from "../../components/MainHeaderButtonsWrapper";
+
+import api from "../../services/api";
+import { i18n } from "../../translate/i18n";
 import toastError from "../../errors/toastError";
+import { AuthContext } from "../../context/Auth/AuthContext";
 
 const reducer = (state, action) => {
   if (action.type === "LOAD_QUICK_ANSWERS") {
@@ -49,7 +50,7 @@ const reducer = (state, action) => {
 
   if (action.type === "UPDATE_QUICK_ANSWERS") {
     const quickAnswer = action.payload;
-    const quickAnswerIndex = state.findIndex((q) => q.id === quickAnswer.id);
+    const quickAnswerIndex = state.findIndex(q => q.id === quickAnswer.id);
 
     if (quickAnswerIndex !== -1) {
       state[quickAnswerIndex] = quickAnswer;
@@ -62,7 +63,7 @@ const reducer = (state, action) => {
   if (action.type === "DELETE_QUICK_ANSWERS") {
     const quickAnswerId = action.payload;
 
-    const quickAnswerIndex = state.findIndex((q) => q.id === quickAnswerId);
+    const quickAnswerIndex = state.findIndex(q => q.id === quickAnswerId);
     if (quickAnswerIndex !== -1) {
       state.splice(quickAnswerIndex, 1);
     }
@@ -74,17 +75,18 @@ const reducer = (state, action) => {
   }
 };
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(theme => ({
   mainPaper: {
     flex: 1,
     padding: theme.spacing(1),
     overflowY: "scroll",
-    ...theme.scrollbarStyles,
-  },
+    ...theme.scrollbarStyles
+  }
 }));
 
 const QuickAnswers = () => {
   const classes = useStyles();
+  const { user } = useContext(AuthContext);
 
   const [loading, setLoading] = useState(false);
   const [pageNumber, setPageNumber] = useState(1);
@@ -107,9 +109,17 @@ const QuickAnswers = () => {
       const fetchQuickAnswers = async () => {
         try {
           const { data } = await api.get("/quickAnswers/", {
-            params: { searchParam, pageNumber },
+            params: { searchParam, pageNumber }
           });
-          dispatch({ type: "LOAD_QUICK_ANSWERS", payload: data.quickAnswers });
+          const quickAnswers = data.quickAnswers.filter(allQuickAnswers => {
+            return user?.customer === "master"
+              ? allQuickAnswers
+              : allQuickAnswers?.user?.id === user?.id ||
+                  allQuickAnswers?.user?.name === user?.name ||
+                  allQuickAnswers?.user?.email === user?.email ||
+                  allQuickAnswers?.userId.toString() === user?.customer;
+          });
+          dispatch({ type: "LOAD_QUICK_ANSWERS", payload: quickAnswers });
           setHasMore(data.hasMore);
           setLoading(false);
         } catch (err) {
@@ -119,12 +129,12 @@ const QuickAnswers = () => {
       fetchQuickAnswers();
     }, 500);
     return () => clearTimeout(delayDebounceFn);
-  }, [searchParam, pageNumber]);
+  }, [searchParam, pageNumber, user.customer, user.id, user.name, user.email]);
 
   useEffect(() => {
     const socket = openSocket(process.env.REACT_APP_BACKEND_URL);
 
-    socket.on("quickAnswer", (data) => {
+    socket.on("quickAnswer", data => {
       if (data.action === "update" || data.action === "create") {
         dispatch({ type: "UPDATE_QUICK_ANSWERS", payload: data.quickAnswer });
       }
@@ -132,7 +142,7 @@ const QuickAnswers = () => {
       if (data.action === "delete") {
         dispatch({
           type: "DELETE_QUICK_ANSWERS",
-          payload: +data.quickAnswerId,
+          payload: +data.quickAnswerId
         });
       }
     });
@@ -142,7 +152,7 @@ const QuickAnswers = () => {
     };
   }, []);
 
-  const handleSearch = (event) => {
+  const handleSearch = event => {
     setSearchParam(event.target.value.toLowerCase());
   };
 
@@ -156,12 +166,12 @@ const QuickAnswers = () => {
     setQuickAnswersModalOpen(false);
   };
 
-  const handleEditQuickAnswers = (quickAnswer) => {
+  const handleEditQuickAnswers = quickAnswer => {
     setSelectedQuickAnswers(quickAnswer);
     setQuickAnswersModalOpen(true);
   };
 
-  const handleDeleteQuickAnswers = async (quickAnswerId) => {
+  const handleDeleteQuickAnswers = async quickAnswerId => {
     try {
       await api.delete(`/quickAnswers/${quickAnswerId}`);
       toast.success(i18n.t("quickAnswers.toasts.deleted"));
@@ -174,10 +184,10 @@ const QuickAnswers = () => {
   };
 
   const loadMore = () => {
-    setPageNumber((prevState) => prevState + 1);
+    setPageNumber(prevState => prevState + 1);
   };
 
-  const handleScroll = (e) => {
+  const handleScroll = e => {
     if (!hasMore || loading) return;
     const { scrollTop, scrollHeight, clientHeight } = e.currentTarget;
     if (scrollHeight - (scrollTop + 100) < clientHeight) {
@@ -217,9 +227,9 @@ const QuickAnswers = () => {
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">
-                  <SearchIcon style={{ color: "gray" }} />
+                  <Search style={{ color: "gray" }} />
                 </InputAdornment>
-              ),
+              )
             }}
           />
           <Button
@@ -252,7 +262,7 @@ const QuickAnswers = () => {
           </TableHead>
           <TableBody>
             <>
-              {quickAnswers.map((quickAnswer) => (
+              {quickAnswers.map(quickAnswer => (
                 <TableRow key={quickAnswer.id}>
                   <TableCell align="center">{quickAnswer.shortcut}</TableCell>
                   <TableCell align="center">{quickAnswer.message}</TableCell>
@@ -266,7 +276,7 @@ const QuickAnswers = () => {
 
                     <IconButton
                       size="small"
-                      onClick={(e) => {
+                      onClick={e => {
                         setConfirmModalOpen(true);
                         setDeletingQuickAnswers(quickAnswer);
                       }}

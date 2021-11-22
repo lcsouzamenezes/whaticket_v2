@@ -270,7 +270,6 @@ const messages = {
           queues: "Queues",
           administration: "Administration",
           users: "Users",
-          settings: "Settings",
         },
         appBar: {
           user: {
@@ -339,19 +338,6 @@ const messages = {
           deleteTitle: "Delete",
           deleteMessage:
             "All user data will be lost. Users' open tickets will be moved to queue.",
-        },
-      },
-      settings: {
-        success: "Settings saved successfully.",
-        title: "Settings",
-        settings: {
-          userCreation: {
-            name: "User creation",
-            options: {
-              enabled: "Enabled",
-              disabled: "Disabled",
-            },
-          },
         },
       },
       messagesList: {

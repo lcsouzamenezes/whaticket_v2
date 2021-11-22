@@ -8,7 +8,6 @@ import Tickets from "../pages/Tickets/";
 import Signup from "../pages/Signup/";
 import Login from "../pages/Login/";
 import Connections from "../pages/Connections/";
-import Settings from "../pages/Settings/";
 import Users from "../pages/Users";
 import Contacts from "../pages/Contacts/";
 import QuickAnswers from "../pages/QuickAnswers/";
@@ -33,12 +32,6 @@ const Routes = () => {
                 component={Tickets}
                 isPrivate
               />
-              <Route
-                exact
-                path="/connections"
-                component={Connections}
-                isPrivate
-              />
               <Route exact path="/contacts" component={Contacts} isPrivate />
               <Route exact path="/users" component={Users} isPrivate />
               <Route
@@ -47,7 +40,12 @@ const Routes = () => {
                 component={QuickAnswers}
                 isPrivate
               />
-              <Route exact path="/Settings" component={Settings} isPrivate />
+              <Route
+                exact
+                path="/connections"
+                component={Connections}
+                isPrivate
+              />
               <Route exact path="/Queues" component={Queues} isPrivate />
             </LoggedInLayout>
           </WhatsAppsProvider>

@@ -11,10 +11,13 @@ import {
   AllowNull,
   HasMany,
   Unique,
-  BelongsToMany
+  BelongsToMany,
+  BelongsTo,
+  ForeignKey
 } from "sequelize-typescript";
 import Queue from "./Queue";
 import Ticket from "./Ticket";
+import User from "./User";
 import WhatsappQueue from "./WhatsappQueue";
 
 @Table
@@ -72,6 +75,13 @@ class Whatsapp extends Model<Whatsapp> {
 
   @HasMany(() => WhatsappQueue)
   whatsappQueues: WhatsappQueue[];
+
+  @BelongsTo(() => User)
+  user: User;
+
+  @ForeignKey(() => User)
+  @Column
+  userId: number;
 }
 
 export default Whatsapp;

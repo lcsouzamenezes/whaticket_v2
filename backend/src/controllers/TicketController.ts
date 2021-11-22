@@ -99,13 +99,12 @@ export const update = async (
     const { farewellMessage } = whatsapp;
 
     if (farewellMessage) {
-       await SendWhatsAppMessage({
+      await SendWhatsAppMessage({
         body: farewellMessage,
         ticket
       });
     }
   }
-
 
   return res.status(200).json(ticket);
 };

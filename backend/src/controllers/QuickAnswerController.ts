@@ -18,6 +18,7 @@ type IndexQuery = {
 interface QuickAnswerData {
   shortcut: string;
   message: string;
+  userId?: string;
 }
 
 export const index = async (req: Request, res: Response): Promise<Response> => {
