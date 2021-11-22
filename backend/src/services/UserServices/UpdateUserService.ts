@@ -8,6 +8,7 @@ interface UserData {
   password?: string;
   name?: string;
   profile?: string;
+  customer?: any;
   queueIds?: number[];
 }
 
@@ -21,6 +22,7 @@ interface Response {
   name: string;
   email: string;
   profile: string;
+  customer: any;
 }
 
 const UpdateUserService = async ({
@@ -36,7 +38,7 @@ const UpdateUserService = async ({
     password: Yup.string()
   });
 
-  const { name, email, password, profile, queueIds = [] } = userData;
+  const { name, email, password, profile, customer, queueIds = [] } = userData;
 
   try {
     await schema.validate({ name, email, password, profile });
@@ -48,7 +50,8 @@ const UpdateUserService = async ({
     name,
     email,
     password,
-    profile
+    profile,
+    customer
   });
 
   await user.$set("queues", queueIds);
@@ -60,6 +63,7 @@ const UpdateUserService = async ({
     name: user.name,
     email: user.email,
     profile: user.profile,
+    customer: user.customer,
     queues: user.queues
   };
 

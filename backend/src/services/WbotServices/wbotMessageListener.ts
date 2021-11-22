@@ -255,7 +255,8 @@ const handleMessage = async (
       contact,
       wbot.id!,
       unreadMessages,
-      groupContact
+      groupContact,
+      whatsapp.userId
     );
 
     if (msg.hasMedia) {

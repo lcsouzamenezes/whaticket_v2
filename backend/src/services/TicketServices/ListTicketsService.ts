@@ -37,7 +37,7 @@ const ListTicketsService = async ({
   withUnreadMessages
 }: Request): Promise<Response> => {
   let whereCondition: Filterable["where"] = {
-    [Op.or]: [{ userId }, { status: "pending" }],
+    [Op.or]: [{ userId }, { status: "pending" }, { status: "open" }],
     queueId: { [Op.or]: [queueIds, null] }
   };
   let includeCondition: Includeable[];

@@ -3,6 +3,7 @@ import * as Yup from "yup";
 import AppError from "../../errors/AppError";
 import { SerializeUser } from "../../helpers/SerializeUser";
 import User from "../../models/User";
+import UpdateUserService from "./UpdateUserService";
 
 interface Request {
   name: string;
@@ -54,24 +55,41 @@ const CreateUserService = async ({
     throw new AppError(err.message);
   }
 
-  const user = await User.create(
-    {
+  {
+    const user = await User.create(
+      {
+        name,
+        email,
+        password,
+        profile,
+        customer
+      },
+      { include: ["queues"] }
+    );
+
+    const userId = user?.id;
+    let userCustomer;
+    // eslint-disable-next-line no-unused-expressions
+    profile === "user"
+      ? (userCustomer = customer)
+      : (userCustomer = String(userId));
+
+    const userData = {
       name,
       email,
       password,
       profile,
-      customer
-    },
-    { include: ["queues"] }
-  );
+      customer: userCustomer
+    };
 
-  await user.$set("queues", queueIds);
+    const userUpdated = await UpdateUserService({ userData, userId });
 
-  await user.reload();
+    await userUpdated.$set("queues", queueIds);
 
-  const serializedUser = SerializeUser(user);
+    await userUpdated.reload();
 
-  return serializedUser;
+    return SerializeUser(userUpdated);
+  }
 };
 
 export default CreateUserService;
