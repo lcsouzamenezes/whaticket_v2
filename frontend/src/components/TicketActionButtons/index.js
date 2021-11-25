@@ -78,7 +78,7 @@ const TicketActionButtons = ({ ticket }) => {
 						loading={loading}
 						startIcon={<Replay />}
 						size="small"
-						onClick={e => handleUpdateTicketStatus(e, "pending", null)}
+						onClick={e => handleUpdateTicketStatus(e, "pending", user?.id)}
 					>
 						{i18n.t("messagesList.header.buttons.return")}
 					</ButtonWithSpinner>
