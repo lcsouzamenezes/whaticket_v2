@@ -1,8 +1,8 @@
 import { useState, useEffect, useContext } from "react";
-import toastError from "../../errors/toastError";
 
 import api from "../../services/api";
 import { AuthContext } from "../../context/Auth/AuthContext";
+import toastError from "../../errors/toastError";
 
 const useTickets = ({
   searchParam,

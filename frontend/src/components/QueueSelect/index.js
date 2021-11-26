@@ -1,11 +1,11 @@
 import React, { useEffect, useState, useContext } from "react";
 
 import {
-	Chip, 
-	InputLabel,
-	MenuItem,
-	FormControl,
-	Select
+  Chip,
+  InputLabel,
+  MenuItem,
+  FormControl,
+  Select
 } from "@material-ui/core";
 
 import { makeStyles } from "@material-ui/core/styles";
@@ -16,87 +16,87 @@ import { AuthContext } from "../../context/Auth/AuthContext";
 import toastError from "../../errors/toastError";
 
 const useStyles = makeStyles(theme => ({
-	chips: {
-		display: "flex",
-		flexWrap: "wrap",
-	},
-	chip: {
-		margin: 2,
-	},
+  chips: {
+    display: "flex",
+    flexWrap: "wrap"
+  },
+  chip: {
+    margin: 2
+  }
 }));
 
 const QueueSelect = ({ selectedQueueIds, onChange }) => {
-	const classes = useStyles();
-	const [queues, setQueues] = useState([]);
-	const { user } = useContext(AuthContext);
+  const classes = useStyles();
+  const [queues, setQueues] = useState([]);
+  const { user } = useContext(AuthContext);
 
-	useEffect(() => {
-		(async () => {
-			try {
-				const { data } = await api.get("/queue");
-				const userQueue = data.filter(allqueues => {
-					return user?.customer === "master"
-						? allqueues
-						: allqueues?.userId === user?.id
-				});
-				setQueues(userQueue);
-			} catch (err) {
-				toastError(err);
-			}
-		})();
-	}, [user.customer, user.id]);
+  useEffect(() => {
+    (async () => {
+      try {
+        const { data } = await api.get("/queue");
+        const userQueue = data.filter(allqueues => {
+          return user?.customer === "master"
+            ? allqueues
+            : allqueues?.userId === user?.id;
+        });
+        setQueues(userQueue);
+      } catch (err) {
+        toastError(err);
+      }
+    })();
+  }, [user.customer, user.id]);
 
-	const handleChange = e => {
-		onChange(e.target.value);
-	};
+  const handleChange = e => {
+    onChange(e.target.value);
+  };
 
-	return (
-		<div style={{ marginTop: 6 }}>
-			<FormControl fullWidth margin="dense" variant="outlined">
-				<InputLabel>{i18n.t("queueSelect.inputLabel")}</InputLabel>
-				<Select
-					multiple
-					labelWidth={60}
-					value={selectedQueueIds}
-					onChange={handleChange}
-					MenuProps={{
-						anchorOrigin: {
-							vertical: "bottom",
-							horizontal: "left",
-						},
-						transformOrigin: {
-							vertical: "top",
-							horizontal: "left",
-						},
-						getContentAnchorEl: null,
-					}}
-					renderValue={selected => (
-						<div className={classes.chips}>
-							{selected?.length > 0 &&
-								selected.map(id => {
-									const queue = queues.find(q => q.id === id);
-									return queue ? (
-										<Chip
-											key={id}
-											style={{ backgroundColor: queue.color }}
-											variant="outlined"
-											label={queue.name}
-											className={classes.chip}
-										/>
-									) : null;
-								})}
-						</div>
-					)}
-				>
-					{queues.map(queue => (
-						<MenuItem key={queue.id} value={queue.id}>
-							{queue.name}
-						</MenuItem>
-					))}
-				</Select>
-			</FormControl>
-		</div>
-	);
+  return (
+    <div style={{ marginTop: 6 }}>
+      <FormControl fullWidth margin="dense" variant="outlined">
+        <InputLabel>{i18n.t("queueSelect.inputLabel")}</InputLabel>
+        <Select
+          multiple
+          labelWidth={60}
+          value={selectedQueueIds}
+          onChange={handleChange}
+          MenuProps={{
+            anchorOrigin: {
+              vertical: "bottom",
+              horizontal: "left"
+            },
+            transformOrigin: {
+              vertical: "top",
+              horizontal: "left"
+            },
+            getContentAnchorEl: null
+          }}
+          renderValue={selected => (
+            <div className={classes.chips}>
+              {selected?.length > 0 &&
+                selected.map(id => {
+                  const queue = queues.find(q => q.id === id);
+                  return queue ? (
+                    <Chip
+                      key={id}
+                      style={{ backgroundColor: queue.color }}
+                      variant="outlined"
+                      label={queue.name}
+                      className={classes.chip}
+                    />
+                  ) : null;
+                })}
+            </div>
+          )}
+        >
+          {queues.map(queue => (
+            <MenuItem key={queue.id} value={queue.id}>
+              {queue.name}
+            </MenuItem>
+          ))}
+        </Select>
+      </FormControl>
+    </div>
+  );
 };
 
 export default QueueSelect;

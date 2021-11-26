@@ -2,60 +2,37 @@ import React, { useState, useContext } from "react";
 import { Link as RouterLink } from "react-router-dom";
 
 import {
+  Link,
+  Grid,
   Avatar,
   Button,
-  CssBaseline,
   TextField,
-  Grid,
-  Box,
-  Typography,
   Container,
-  InputAdornment,
+  Typography,
   IconButton,
-  Link
-} from '@material-ui/core';
+  CssBaseline,
+  InputAdornment
+} from "@material-ui/core";
 
-import { LockOutlined, Visibility, VisibilityOff } from '@material-ui/icons';
+import { LockOutlined, Visibility, VisibilityOff } from "@material-ui/icons";
 
-import { makeStyles } from "@material-ui/core/styles";
-
-import { i18n } from "../../translate/i18n";
+import useStyles from "./styles";
 
 import { AuthContext } from "../../context/Auth/AuthContext";
-
-const useStyles = makeStyles((theme) => ({
-  paper: {
-    marginTop: theme.spacing(8),
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-  },
-  avatar: {
-    margin: theme.spacing(1),
-    backgroundColor: theme.palette.secondary.main,
-  },
-  form: {
-    width: "100%", // Fix IE 11 issue.
-    marginTop: theme.spacing(1),
-  },
-  submit: {
-    margin: theme.spacing(3, 0, 2),
-  },
-}));
+import { i18n } from "../../translate/i18n";
 
 const Login = () => {
   const classes = useStyles();
 
   const [user, setUser] = useState({ email: "", password: "" });
   const [showPassword, setShowPassword] = useState(false);
-
   const { handleLogin } = useContext(AuthContext);
 
-  const handleChangeInput = (e) => {
+  const handleChangeInput = e => {
     setUser({ ...user, [e.target.name]: e.target.value });
   };
 
-  const handlSubmit = (e) => {
+  const handlSubmit = e => {
     e.preventDefault();
     handleLogin(user);
   };
@@ -94,13 +71,13 @@ const Login = () => {
             value={user.password}
             onChange={handleChangeInput}
             autoComplete="current-password"
-            type={showPassword ? 'text' : 'password'}
+            type={showPassword ? "text" : "password"}
             InputProps={{
               endAdornment: (
                 <InputAdornment position="end">
                   <IconButton
                     aria-label="toggle password visibility"
-                    onClick={() => setShowPassword((e) => !e)}
+                    onClick={() => setShowPassword(e => !e)}
                   >
                     {showPassword ? <VisibilityOff /> : <Visibility />}
                   </IconButton>
@@ -131,7 +108,6 @@ const Login = () => {
           </Grid>
         </form>
       </div>
-      <Box mt={8}>{/* <Copyright /> */}</Box>
     </Container>
   );
 };
