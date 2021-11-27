@@ -1,5 +1,6 @@
 import { Sequelize } from "sequelize";
 import QuickAnswer from "../../models/QuickAnswer";
+import User from "../../models/User";
 
 interface Request {
   searchParam?: string;
@@ -30,7 +31,14 @@ const ListQuickAnswerService = async ({
     where: whereCondition,
     limit,
     offset,
-    order: [["message", "ASC"]]
+    order: [["message", "ASC"]],
+    include: [
+      {
+        model: User,
+        as: "user",
+        attributes: ["id", "name", "email", "customer"]
+      }
+    ]
   });
 
   const hasMore = count > offset + quickAnswers.length;

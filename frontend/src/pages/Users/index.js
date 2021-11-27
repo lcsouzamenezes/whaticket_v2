@@ -1,38 +1,40 @@
-import React, { useState, useEffect, useReducer } from "react";
+import React, { useState, useEffect, useReducer, useContext } from "react";
 import { toast } from "react-toastify";
 import openSocket from "socket.io-client";
 
+import {
+  Paper,
+  Button,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableRow,
+  IconButton,
+  TextField,
+  InputAdornment
+} from "@material-ui/core";
+
+import { Search, DeleteOutline, Edit } from "@material-ui/icons";
+
 import { makeStyles } from "@material-ui/core/styles";
-import Paper from "@material-ui/core/Paper";
-import Button from "@material-ui/core/Button";
-import Table from "@material-ui/core/Table";
-import TableBody from "@material-ui/core/TableBody";
-import TableCell from "@material-ui/core/TableCell";
-import TableHead from "@material-ui/core/TableHead";
-import TableRow from "@material-ui/core/TableRow";
-import IconButton from "@material-ui/core/IconButton";
-import SearchIcon from "@material-ui/icons/Search";
-import TextField from "@material-ui/core/TextField";
-import InputAdornment from "@material-ui/core/InputAdornment";
 
-import DeleteOutlineIcon from "@material-ui/icons/DeleteOutline";
-import EditIcon from "@material-ui/icons/Edit";
-
-import MainContainer from "../../components/MainContainer";
-import MainHeader from "../../components/MainHeader";
-import MainHeaderButtonsWrapper from "../../components/MainHeaderButtonsWrapper";
 import Title from "../../components/Title";
+import UserModal from "../../components/UserModal";
+import MainHeader from "../../components/MainHeader";
+import MainContainer from "../../components/MainContainer";
+import TableRowSkeleton from "../../components/TableRowSkeleton";
+import ConfirmationModal from "../../components/ConfirmationModal";
+import MainHeaderButtonsWrapper from "../../components/MainHeaderButtonsWrapper";
 
 import api from "../../services/api";
+import { AuthContext } from "../../context/Auth/AuthContext";
 import { i18n } from "../../translate/i18n";
-import TableRowSkeleton from "../../components/TableRowSkeleton";
-import UserModal from "../../components/UserModal";
-import ConfirmationModal from "../../components/ConfirmationModal";
 import toastError from "../../errors/toastError";
 
 const reducer = (state, action) => {
   if (action.type === "LOAD_USERS") {
-    const users = action.payload;
+    const users = action.payload; 
     const newUsers = [];
 
     users.forEach((user) => {
@@ -49,7 +51,7 @@ const reducer = (state, action) => {
 
   if (action.type === "UPDATE_USERS") {
     const user = action.payload;
-    const userIndex = state.findIndex((u) => u.id === user.id);
+    const userIndex = state.findIndex(u => u.id === user.id);
 
     if (userIndex !== -1) {
       state[userIndex] = user;
@@ -62,7 +64,7 @@ const reducer = (state, action) => {
   if (action.type === "DELETE_USER") {
     const userId = action.payload;
 
-    const userIndex = state.findIndex((u) => u.id === userId);
+    const userIndex = state.findIndex(u => u.id === userId);
     if (userIndex !== -1) {
       state.splice(userIndex, 1);
     }
@@ -74,13 +76,13 @@ const reducer = (state, action) => {
   }
 };
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(theme => ({
   mainPaper: {
     flex: 1,
     padding: theme.spacing(1),
     overflowY: "scroll",
-    ...theme.scrollbarStyles,
-  },
+    ...theme.scrollbarStyles
+  }
 }));
 
 const Users = () => {
@@ -95,6 +97,7 @@ const Users = () => {
   const [confirmModalOpen, setConfirmModalOpen] = useState(false);
   const [searchParam, setSearchParam] = useState("");
   const [users, dispatch] = useReducer(reducer, []);
+  const { user } = useContext(AuthContext);
 
   useEffect(() => {
     dispatch({ type: "RESET" });
@@ -107,9 +110,16 @@ const Users = () => {
       const fetchUsers = async () => {
         try {
           const { data } = await api.get("/users/", {
-            params: { searchParam, pageNumber },
+            params: { searchParam, pageNumber }
           });
-          dispatch({ type: "LOAD_USERS", payload: data.users });
+          const users = data.users.filter(users => {
+            return user?.customer === "master"
+              ? users
+              : users?.name === user?.name || 
+                users?.email === user?.email || 
+                users?.customer === user?.id.toString();
+          });
+          dispatch({ type: "LOAD_USERS", payload: users });
           setHasMore(data.hasMore);
           setLoading(false);
         } catch (err) {
@@ -119,12 +129,12 @@ const Users = () => {
       fetchUsers();
     }, 500);
     return () => clearTimeout(delayDebounceFn);
-  }, [searchParam, pageNumber]);
+  }, [searchParam, pageNumber, user.customer, user.name, user.email, user.id]);
 
   useEffect(() => {
     const socket = openSocket(process.env.REACT_APP_BACKEND_URL);
 
-    socket.on("user", (data) => {
+    socket.on("user", data => {
       if (data.action === "update" || data.action === "create") {
         dispatch({ type: "UPDATE_USERS", payload: data.user });
       }
@@ -149,16 +159,16 @@ const Users = () => {
     setUserModalOpen(false);
   };
 
-  const handleSearch = (event) => {
+  const handleSearch = event => {
     setSearchParam(event.target.value.toLowerCase());
   };
 
-  const handleEditUser = (user) => {
+  const handleEditUser = user => {
     setSelectedUser(user);
     setUserModalOpen(true);
   };
 
-  const handleDeleteUser = async (userId) => {
+  const handleDeleteUser = async userId => {
     try {
       await api.delete(`/users/${userId}`);
       toast.success(i18n.t("users.toasts.deleted"));
@@ -171,10 +181,10 @@ const Users = () => {
   };
 
   const loadMore = () => {
-    setPageNumber((prevState) => prevState + 1);
+    setPageNumber(prevState => prevState + 1);
   };
 
-  const handleScroll = (e) => {
+  const handleScroll = e => {
     if (!hasMore || loading) return;
     const { scrollTop, scrollHeight, clientHeight } = e.currentTarget;
     if (scrollHeight - (scrollTop + 100) < clientHeight) {
@@ -214,9 +224,9 @@ const Users = () => {
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">
-                  <SearchIcon style={{ color: "gray" }} />
+                  <Search style={{ color: "gray" }} />
                 </InputAdornment>
-              ),
+              )
             }}
           />
           <Button
@@ -236,7 +246,9 @@ const Users = () => {
         <Table size="small">
           <TableHead>
             <TableRow>
-              <TableCell align="center">{i18n.t("users.table.name")}</TableCell>
+              <TableCell align="center">
+                {i18n.t("users.table.name")}
+              </TableCell>
               <TableCell align="center">
                 {i18n.t("users.table.email")}
               </TableCell>
@@ -260,17 +272,17 @@ const Users = () => {
                       size="small"
                       onClick={() => handleEditUser(user)}
                     >
-                      <EditIcon />
+                      <Edit />
                     </IconButton>
 
                     <IconButton
                       size="small"
-                      onClick={(e) => {
+                      onClick={e => {
                         setConfirmModalOpen(true);
                         setDeletingUser(user);
                       }}
                     >
-                      <DeleteOutlineIcon />
+                      <DeleteOutline />
                     </IconButton>
                   </TableCell>
                 </TableRow>

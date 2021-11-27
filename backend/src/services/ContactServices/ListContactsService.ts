@@ -1,5 +1,7 @@
 import { Sequelize, Op } from "sequelize";
 import Contact from "../../models/Contact";
+import Ticket from "../../models/Ticket";
+import User from "../../models/User";
 
 interface Request {
   searchParam?: string;
@@ -32,6 +34,13 @@ const ListContactsService = async ({
   const offset = limit * (+pageNumber - 1);
 
   const { count, rows: contacts } = await Contact.findAndCountAll({
+    include: [
+      {
+        model: Ticket,
+        as: "tickets",
+        attributes: ["userId"]
+      }
+    ],
     where: whereCondition,
     limit,
     offset,

@@ -274,7 +274,6 @@ const messages = {
           queues: "Linhas",
           administration: "Administración",
           users: "Usuarios",
-          settings: "Configuración",
         },
         appBar: {
           user: {
@@ -344,19 +343,6 @@ const messages = {
           deleteTitle: "Borrar",
           deleteMessage:
             "Toda la información del usuario se perderá. Los tickets abiertos de los usuarios se moverán a la cola.",
-        },
-      },
-      settings: {
-        success: "Configuración guardada satisfactoriamente.",
-        title: "Configuración",
-        settings: {
-          userCreation: {
-            name: "Creación de usuarios",
-            options: {
-              enabled: "Habilitado",
-              disabled: "Deshabilitado",
-            },
-          },
         },
       },
       messagesList: {

@@ -1,5 +1,5 @@
-import React, { useEffect, useReducer, useState } from "react";
-
+import React, { useEffect, useReducer, useState, useContext } from "react";
+import { toast } from "react-toastify";
 import openSocket from "socket.io-client";
 
 import {
@@ -15,18 +15,20 @@ import {
   Typography,
 } from "@material-ui/core";
 
-import MainContainer from "../../components/MainContainer";
-import MainHeader from "../../components/MainHeader";
-import MainHeaderButtonsWrapper from "../../components/MainHeaderButtonsWrapper";
-import TableRowSkeleton from "../../components/TableRowSkeleton";
+import { DeleteOutline, Edit } from "@material-ui/icons";
+
 import Title from "../../components/Title";
+import MainHeader from "../../components/MainHeader";
+import QueueModal from "../../components/QueueModal";
+import MainContainer from "../../components/MainContainer";
+import TableRowSkeleton from "../../components/TableRowSkeleton";
+import ConfirmationModal from "../../components/ConfirmationModal";
+import MainHeaderButtonsWrapper from "../../components/MainHeaderButtonsWrapper";
+
+import api from "../../services/api";
 import { i18n } from "../../translate/i18n";
 import toastError from "../../errors/toastError";
-import api from "../../services/api";
-import { DeleteOutline, Edit } from "@material-ui/icons";
-import QueueModal from "../../components/QueueModal";
-import { toast } from "react-toastify";
-import ConfirmationModal from "../../components/ConfirmationModal";
+import { AuthContext } from "../../context/Auth/AuthContext";
 
 const useStyles = makeStyles((theme) => ({
   mainPaper: {
@@ -90,17 +92,22 @@ const Queues = () => {
 
   const [queues, dispatch] = useReducer(reducer, []);
   const [loading, setLoading] = useState(false);
-
   const [queueModalOpen, setQueueModalOpen] = useState(false);
   const [selectedQueue, setSelectedQueue] = useState(null);
   const [confirmModalOpen, setConfirmModalOpen] = useState(false);
+  const { user } = useContext(AuthContext);
 
   useEffect(() => {
     (async () => {
       setLoading(true);
       try {
         const { data } = await api.get("/queue");
-        dispatch({ type: "LOAD_QUEUES", payload: data });
+        const queues = data.filter(queues => {
+          return user?.customer === "master"
+            ? queues
+            : queues?.userId === user?.id;
+        });
+        dispatch({ type: "LOAD_QUEUES", payload: queues });
 
         setLoading(false);
       } catch (err) {
@@ -108,7 +115,7 @@ const Queues = () => {
         setLoading(false);
       }
     })();
-  }, []);
+  }, [user.customer, user.email, user.id, user.name]);
 
   useEffect(() => {
     const socket = openSocket(process.env.REACT_APP_BACKEND_URL);

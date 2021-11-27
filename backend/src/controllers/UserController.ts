@@ -1,7 +1,6 @@
 import { Request, Response } from "express";
 import { getIO } from "../libs/socket";
 
-import CheckSettingsHelper from "../helpers/CheckSettings";
 import AppError from "../errors/AppError";
 
 import CreateUserService from "../services/UserServices/CreateUserService";
@@ -27,32 +26,33 @@ export const index = async (req: Request, res: Response): Promise<Response> => {
 };
 
 export const store = async (req: Request, res: Response): Promise<Response> => {
-  const { email, password, name, profile, queueIds } = req.body;
+  try {
+    const { email, password, name, profile, customer, queueIds } = req.body;
 
-  if (
-    req.url === "/signup" &&
-    (await CheckSettingsHelper("userCreation")) === "disabled"
-  ) {
-    throw new AppError("ERR_USER_CREATION_DISABLED", 403);
-  } else if (req.url !== "/signup" && req.user.profile !== "admin") {
-    throw new AppError("ERR_NO_PERMISSION", 403);
+    if (req.url !== "/signup" && req.user.profile !== "admin") {
+      const response = new AppError("ERR_NO_PERMISSION", 403);
+      return res.status(403).json(response);
+    }
+
+    const user = await CreateUserService({
+      email,
+      password,
+      name,
+      profile,
+      customer,
+      queueIds
+    });
+
+    const io = getIO();
+    io.emit("user", {
+      action: "create",
+      user
+    });
+
+    return res.status(200).json(user);
+  } catch (error) {
+    return res.status(400).json(error);
   }
-
-  const user = await CreateUserService({
-    email,
-    password,
-    name,
-    profile,
-    queueIds
-  });
-
-  const io = getIO();
-  io.emit("user", {
-    action: "create",
-    user
-  });
-
-  return res.status(200).json(user);
 };
 
 export const show = async (req: Request, res: Response): Promise<Response> => {
