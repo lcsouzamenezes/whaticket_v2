@@ -274,13 +274,20 @@ const Users = () => {
                   <TableCell align="center">{user.name}</TableCell>
                   <TableCell align="center">{user.email}</TableCell>
                   <TableCell align="center">
-                    <Chip
-                      icon={
-                        user.profile === "admin" ? <AdminIcon /> : <UserIcon />
-                      }
-                      color={user.profile === "admin" ? "primary" : "default"}
-                      label={user.profile}
-                    />
+                    {user.profile === "admin" ? (
+                      <Chip
+                        icon={<AdminIcon />}
+                        color="primary"
+                        label={user.profile}
+                      />
+                    ) : (
+                      <Chip
+                        icon={<UserIcon />}
+                        variant="outlined"
+                        color="primary"
+                        label={user.profile}
+                      />
+                    )}
                   </TableCell>
                   <TableCell align="center">
                     <IconButton
