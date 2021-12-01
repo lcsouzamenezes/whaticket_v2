@@ -5,12 +5,8 @@ import { toast } from "react-toastify";
 import {
   Button,
   Dialog,
-  Select,
-  MenuItem,
   TextField,
   IconButton,
-  InputLabel,
-  FormControl,
   DialogTitle,
   DialogActions,
   DialogContent,
@@ -160,35 +156,6 @@ const UserModal = ({ open, onClose, userId }) => {
                     margin="dense"
                     fullWidth
                   />
-                  <FormControl
-                    variant="outlined"
-                    className={classes.formControl}
-                    margin="dense"
-                  >
-                    <Can
-                      role={loggedInUser.profile}
-                      perform="user-modal:editProfile"
-                      yes={() => (
-                        <>
-                          <InputLabel id="profile-selection-input-label">
-                            {i18n.t("userModal.form.profile")}
-                          </InputLabel>
-
-                          <Field
-                            as={Select}
-                            label={i18n.t("userModal.form.profile")}
-                            name="profile"
-                            labelId="profile-selection-label"
-                            id="profile-selection"
-                            required
-                          >
-                            <MenuItem value="admin">Admin</MenuItem>
-                            <MenuItem value="user">User</MenuItem>
-                          </Field>
-                        </>
-                      )}
-                    />
-                  </FormControl>
                 </div>
                 <Can
                   role={loggedInUser.profile}
