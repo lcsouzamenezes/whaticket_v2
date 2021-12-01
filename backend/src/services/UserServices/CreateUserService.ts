@@ -31,7 +31,20 @@ const CreateUserService = async ({
   queueIds = []
 }: Request): Promise<Response> => {
   const schema = Yup.object().shape({
-    name: Yup.string().required().min(2),
+    name: Yup.string()
+      .required()
+      .min(2)
+      .test(
+        "Check-name",
+        "An user with this name already exists.",
+        async value => {
+          if (!value) return false;
+          const nameExists = await User.findOne({
+            where: { name: value }
+          });
+          return !nameExists;
+        }
+      ),
     email: Yup.string()
       .email()
       .required()
@@ -68,18 +81,13 @@ const CreateUserService = async ({
     );
 
     const userId = user?.id;
-    let userCustomer;
-    // eslint-disable-next-line no-unused-expressions
-    profile === "user"
-      ? (userCustomer = customer)
-      : (userCustomer = String(userId));
 
     const userData = {
       name,
       email,
       password,
       profile,
-      customer: userCustomer
+      customer: profile === "user" ? customer : String(userId)
     };
 
     const userUpdated = await UpdateUserService({ userData, userId });
