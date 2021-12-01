@@ -1,13 +1,15 @@
 import { Request, Response } from "express";
 import { getIO } from "../libs/socket";
 
-import AppError from "../errors/AppError";
+import User from "../models/User";
 
 import CreateUserService from "../services/UserServices/CreateUserService";
 import ListUsersService from "../services/UserServices/ListUsersService";
-import UpdateUserService from "../services/UserServices/UpdateUserService";
 import ShowUserService from "../services/UserServices/ShowUserService";
+import UpdateUserService from "../services/UserServices/UpdateUserService";
 import DeleteUserService from "../services/UserServices/DeleteUserService";
+
+import AppError from "../errors/AppError";
 
 type IndexQuery = {
   searchParam: string;
@@ -32,6 +34,13 @@ export const store = async (req: Request, res: Response): Promise<Response> => {
     if (req.url !== "/signup" && req.user.profile !== "admin") {
       const response = new AppError("ERR_NO_PERMISSION", 403);
       return res.status(403).json(response);
+    }
+
+    const nameExists = await User.findOne({ where: { name } });
+    const emailExists = await User.findOne({ where: { email } });
+
+    if (emailExists || nameExists) {
+      return res.status(400).json("a");
     }
 
     const user = await CreateUserService({

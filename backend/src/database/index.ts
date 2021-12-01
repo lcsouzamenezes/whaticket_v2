@@ -1,6 +1,6 @@
 import { Sequelize } from "sequelize-typescript";
+
 import User from "../models/User";
-import Setting from "../models/Setting";
 import Contact from "../models/Contact";
 import Ticket from "../models/Ticket";
 import Whatsapp from "../models/Whatsapp";
@@ -13,7 +13,6 @@ import QuickAnswer from "../models/QuickAnswer";
 
 // eslint-disable-next-line
 const dbConfig = require("../config/database");
-// import dbConfig from "../config/database";
 
 const sequelize = new Sequelize(dbConfig);
 
@@ -24,7 +23,6 @@ const models = [
   Message,
   Whatsapp,
   ContactCustomField,
-  Setting,
   Queue,
   WhatsappQueue,
   UserQueue,
