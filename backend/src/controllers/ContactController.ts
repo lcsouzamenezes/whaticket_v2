@@ -10,7 +10,7 @@ import DeleteContactService from "../services/ContactServices/DeleteContactServi
 
 import CheckIsValidContact from "../services/WbotServices/CheckIsValidContact";
 import GetProfilePicUrl from "../services/WbotServices/GetProfilePicUrl";
-import AppError from "../errors/AppError";
+import AppError from "../validations/config/AppError";
 
 type IndexQuery = {
   searchParam: string;

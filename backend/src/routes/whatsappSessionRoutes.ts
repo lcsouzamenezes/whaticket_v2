@@ -1,7 +1,7 @@
 import { Router } from "express";
-import isAuth from "../middleware/isAuth";
 
 import WhatsAppSessionController from "../controllers/WhatsAppSessionController";
+import isAuth from "../middleware/isAuth";
 
 const whatsappSessionRoutes = Router();
 

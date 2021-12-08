@@ -1,6 +1,6 @@
 import { Server as SocketIO } from "socket.io";
 import { Server } from "http";
-import AppError from "../errors/AppError";
+import AppError from "../validations/config/AppError";
 import { logger } from "../utils/logger";
 
 let io: SocketIO;

@@ -8,7 +8,7 @@ import * as Sentry from "@sentry/node";
 
 import "./database";
 import uploadConfig from "./config/upload";
-import AppError from "./errors/AppError";
+import AppError from "./validations/config/AppError";
 import routes from "./routes";
 import { logger } from "./utils/logger";
 

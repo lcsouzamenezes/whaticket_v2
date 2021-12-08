@@ -1,5 +1,5 @@
 import Ticket from "../../models/Ticket";
-import AppError from "../../errors/AppError";
+import AppError from "../../validations/config/AppError";
 
 const DeleteTicketService = async (id: string): Promise<Ticket> => {
   const ticket = await Ticket.findOne({

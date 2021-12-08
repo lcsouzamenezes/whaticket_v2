@@ -1,4 +1,4 @@
-import AppError from "../../errors/AppError";
+import AppError from "../../validations/config/AppError";
 import Message from "../../models/Message";
 import Ticket from "../../models/Ticket";
 import ShowTicketService from "../TicketServices/ShowTicketService";

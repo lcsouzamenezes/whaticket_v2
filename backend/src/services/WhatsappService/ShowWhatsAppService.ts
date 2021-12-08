@@ -1,5 +1,5 @@
 import Whatsapp from "../../models/Whatsapp";
-import AppError from "../../errors/AppError";
+import AppError from "../../validations/config/AppError";
 import Queue from "../../models/Queue";
 
 const ShowWhatsAppService = async (id: string | number): Promise<Whatsapp> => {

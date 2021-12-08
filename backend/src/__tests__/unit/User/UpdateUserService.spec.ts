@@ -1,5 +1,5 @@
 import faker from "faker";
-import AppError from "../../../errors/AppError";
+import AppError from "../../../validations/config/AppError";
 import CreateUserService from "../../../services/UserServices/CreateUserService";
 import UpdateUserService from "../../../services/UserServices/UpdateUserService";
 import { disconnect, truncate } from "../../utils/database";
