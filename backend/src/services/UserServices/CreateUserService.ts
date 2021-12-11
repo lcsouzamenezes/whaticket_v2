@@ -1,6 +1,7 @@
 import { SerializeUser } from "../../helpers/SerializeUser";
 
 import User from "../../models/User";
+import UpdateUserService from "./UpdateUserService";
 
 interface Request {
   name: string;
@@ -48,7 +49,7 @@ const CreateUserService = async ({
     customer: profile === "user" ? customer : String(userId)
   };
 
-  await user.update({ userData, userId });
+  await UpdateUserService({ userData, userId });
 
   await user.$set("queues", queueIds);
 
