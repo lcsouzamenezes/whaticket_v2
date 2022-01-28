@@ -13,7 +13,11 @@ import {
   IconButton
 } from "@material-ui/core";
 
-import { Menu as MenuIcon, ChevronLeft, AccountCircle } from "@material-ui/icons";
+import {
+  Menu as MenuIcon,
+  ChevronLeft,
+  AccountCircle
+} from "@material-ui/icons";
 
 import useStyles from "./styles";
 
@@ -31,9 +35,8 @@ const LoggedInLayout = ({ children }) => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [userModalOpen, setUserModalOpen] = useState(false);
-  const { handleLogout, loading } = useContext(AuthContext);
   const [drawerVariant, setDrawerVariant] = useState("permanent");
-  const { user } = useContext(AuthContext);
+  const { handleLogout, loading, user } = useContext(AuthContext);
 
   useEffect(() => {
     if (document.body.offsetWidth > 600) {

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, memo } from "react";
 import QRCode from "qrcode.react";
 import openSocket from "socket.io-client";
 
@@ -62,4 +62,4 @@ const QrcodeModal = ({ open, onClose, whatsAppId }) => {
   );
 };
 
-export default React.memo(QrcodeModal);
+export default memo(QrcodeModal);

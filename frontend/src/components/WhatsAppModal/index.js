@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext, memo } from "react";
 import { Formik, Form, Field } from "formik";
 import { toast } from "react-toastify";
 
@@ -209,4 +209,4 @@ const WhatsAppModal = ({ open, onClose, whatsAppId }) => {
   );
 };
 
-export default React.memo(WhatsAppModal);
+export default memo(WhatsAppModal);
