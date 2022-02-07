@@ -119,10 +119,16 @@ const Contacts = () => {
           });
           const contacts = data.contacts.filter(allContacts => {
             const userContact = allContacts?.tickets[0];
-            return user?.customer === "master"
-              ? allContacts
-              : userContact?.userId === user?.id ||
-                  userContact?.userId.toString() === user?.customer;
+            if (user?.customer === "master") {
+              return allContacts;
+            } else if (!userContact?.userId) {
+              return "";
+            } else {
+              return (
+                userContact?.userId === user?.id ||
+                userContact?.userId.toString() === user?.customer
+              );
+            }
           });
           dispatch({ type: "LOAD_CONTACTS", payload: contacts });
           setHasMore(data.hasMore);
