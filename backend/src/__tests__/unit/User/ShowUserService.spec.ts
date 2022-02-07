@@ -1,5 +1,5 @@
 import faker from "faker";
-import AppError from "../../../errors/AppError";
+import AppError from "../../../validations/config/AppError";
 import User from "../../../models/User";
 import CreateUserService from "../../../services/UserServices/CreateUserService";
 import ShowUserService from "../../../services/UserServices/ShowUserService";

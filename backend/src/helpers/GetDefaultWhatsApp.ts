@@ -1,4 +1,4 @@
-import AppError from "../errors/AppError";
+import AppError from "../validations/config/AppError";
 import Whatsapp from "../models/Whatsapp";
 
 const GetDefaultWhatsApp = async (): Promise<Whatsapp> => {

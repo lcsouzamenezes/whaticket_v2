@@ -1,5 +1,5 @@
 import Ticket from "../../models/Ticket";
-import AppError from "../../errors/AppError";
+import AppError from "../../validations/config/AppError";
 import Contact from "../../models/Contact";
 import User from "../../models/User";
 import Queue from "../../models/Queue";

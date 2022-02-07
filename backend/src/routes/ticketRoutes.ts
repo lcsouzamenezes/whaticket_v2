@@ -1,9 +1,9 @@
-import express from "express";
-import isAuth from "../middleware/isAuth";
+import { Router } from "express";
 
 import * as TicketController from "../controllers/TicketController";
+import isAuth from "../middleware/isAuth";
 
-const ticketRoutes = express.Router();
+const ticketRoutes = Router();
 
 ticketRoutes.get("/tickets", isAuth, TicketController.index);
 
