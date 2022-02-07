@@ -1,4 +1,4 @@
-import AppError from "../../errors/AppError";
+import AppError from "../../validations/config/AppError";
 import Queue from "../../models/Queue";
 
 const ShowQueueService = async (queueId: number | string): Promise<Queue> => {

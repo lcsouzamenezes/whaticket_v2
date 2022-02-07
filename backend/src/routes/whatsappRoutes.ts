@@ -1,9 +1,9 @@
-import express from "express";
-import isAuth from "../middleware/isAuth";
+import { Router } from "express";
 
 import * as WhatsAppController from "../controllers/WhatsAppController";
+import isAuth from "../middleware/isAuth";
 
-const whatsappRoutes = express.Router();
+const whatsappRoutes = Router();
 
 whatsappRoutes.get("/whatsapp/", isAuth, WhatsAppController.index);
 

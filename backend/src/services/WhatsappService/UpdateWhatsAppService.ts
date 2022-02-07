@@ -1,7 +1,7 @@
 import * as Yup from "yup";
 import { Op } from "sequelize";
 
-import AppError from "../../errors/AppError";
+import AppError from "../../validations/config/AppError";
 import Whatsapp from "../../models/Whatsapp";
 import ShowWhatsAppService from "./ShowWhatsAppService";
 import AssociateWhatsappQueue from "./AssociateWhatsappQueue";

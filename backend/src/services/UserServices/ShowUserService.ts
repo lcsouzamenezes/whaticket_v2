@@ -1,6 +1,8 @@
 import User from "../../models/User";
-import AppError from "../../errors/AppError";
 import Queue from "../../models/Queue";
+
+import AppError from "../../validations/config/AppError";
+import HttpStatus from "../../validations/config/HttpStatus";
 
 const ShowUserService = async (id: string | number): Promise<User> => {
   const user = await User.findByPk(id, {
@@ -10,8 +12,9 @@ const ShowUserService = async (id: string | number): Promise<User> => {
     ],
     order: [[{ model: Queue, as: "queues" }, "name", "asc"]]
   });
+
   if (!user) {
-    throw new AppError("ERR_NO_USER_FOUND", 404);
+    throw new AppError("ERR_NO_USER_FOUND", HttpStatus.NOT_FOUND);
   }
 
   return user;

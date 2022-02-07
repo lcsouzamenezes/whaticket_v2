@@ -1,4 +1,4 @@
-import AppError from "../../errors/AppError";
+import AppError from "../../validations/config/AppError";
 import GetDefaultWhatsApp from "../../helpers/GetDefaultWhatsApp";
 import { getWbot } from "../../libs/wbot";
 

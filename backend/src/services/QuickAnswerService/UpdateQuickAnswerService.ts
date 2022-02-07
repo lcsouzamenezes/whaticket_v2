@@ -1,5 +1,5 @@
 import QuickAnswer from "../../models/QuickAnswer";
-import AppError from "../../errors/AppError";
+import AppError from "../../validations/config/AppError";
 
 interface QuickAnswerData {
   shortcut?: string;

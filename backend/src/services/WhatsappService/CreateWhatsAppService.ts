@@ -1,6 +1,6 @@
 import * as Yup from "yup";
 
-import AppError from "../../errors/AppError";
+import AppError from "../../validations/config/AppError";
 import Whatsapp from "../../models/Whatsapp";
 import AssociateWhatsappQueue from "./AssociateWhatsappQueue";
 

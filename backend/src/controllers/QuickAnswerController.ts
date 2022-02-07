@@ -8,7 +8,7 @@ import ShowQuickAnswerService from "../services/QuickAnswerService/ShowQuickAnsw
 import UpdateQuickAnswerService from "../services/QuickAnswerService/UpdateQuickAnswerService";
 import DeleteQuickAnswerService from "../services/QuickAnswerService/DeleteQuickAnswerService";
 
-import AppError from "../errors/AppError";
+import AppError from "../validations/config/AppError";
 
 type IndexQuery = {
   searchParam: string;

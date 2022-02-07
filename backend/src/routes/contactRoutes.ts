@@ -1,10 +1,10 @@
-import express from "express";
-import isAuth from "../middleware/isAuth";
+import { Router } from "express";
 
 import * as ContactController from "../controllers/ContactController";
 import * as ImportPhoneContactsController from "../controllers/ImportPhoneContactsController";
+import isAuth from "../middleware/isAuth";
 
-const contactRoutes = express.Router();
+const contactRoutes = Router();
 
 contactRoutes.post(
   "/contacts/import",

@@ -1,5 +1,5 @@
 import { Op } from "sequelize";
-import AppError from "../errors/AppError";
+import AppError from "../validations/config/AppError";
 import Ticket from "../models/Ticket";
 
 const CheckContactOpenTickets = async (contactId: number): Promise<void> => {

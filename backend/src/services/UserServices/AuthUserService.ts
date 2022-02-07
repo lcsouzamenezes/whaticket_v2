@@ -1,11 +1,14 @@
 import User from "../../models/User";
-import AppError from "../../errors/AppError";
+import Queue from "../../models/Queue";
+
 import {
   createAccessToken,
   createRefreshToken
 } from "../../helpers/CreateTokens";
 import { SerializeUser } from "../../helpers/SerializeUser";
-import Queue from "../../models/Queue";
+
+import AppError from "../../validations/config/AppError";
+import HttpStatus from "../../validations/config/HttpStatus";
 
 interface SerializedUser {
   id: number;
@@ -35,17 +38,12 @@ const AuthUserService = async ({
     include: ["queues"]
   });
 
-  if (!user) {
-    throw new AppError("ERR_INVALID_CREDENTIALS", 401);
-  }
-
-  if (!(await user.checkPassword(password))) {
-    throw new AppError("ERR_INVALID_CREDENTIALS", 401);
+  if (!user || !(await user.checkPassword(password))) {
+    throw new AppError("ERR_INVALID_CREDENTIALS", HttpStatus.UNAUTHORIZED);
   }
 
   const token = createAccessToken(user);
   const refreshToken = createRefreshToken(user);
-
   const serializedUser = SerializeUser(user);
 
   return {

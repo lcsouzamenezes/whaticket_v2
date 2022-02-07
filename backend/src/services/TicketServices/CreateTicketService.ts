@@ -1,4 +1,4 @@
-import AppError from "../../errors/AppError";
+import AppError from "../../validations/config/AppError";
 import CheckContactOpenTickets from "../../helpers/CheckContactOpenTickets";
 import GetDefaultWhatsApp from "../../helpers/GetDefaultWhatsApp";
 import Ticket from "../../models/Ticket";

@@ -1,4 +1,4 @@
-import AppError from "../../errors/AppError";
+import AppError from "../../validations/config/AppError";
 import QuickAnswer from "../../models/QuickAnswer";
 
 interface Request {

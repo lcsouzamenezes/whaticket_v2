@@ -1,5 +1,5 @@
 import Contact from "../../models/Contact";
-import AppError from "../../errors/AppError";
+import AppError from "../../validations/config/AppError";
 
 const ShowContactService = async (id: string | number): Promise<Contact> => {
   const contact = await Contact.findByPk(id, { include: ["extraInfo"] });
