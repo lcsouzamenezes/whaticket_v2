@@ -90,13 +90,13 @@ const CreateUserService = async ({
       customer: profile === "user" ? customer : String(userId)
     };
 
-    const userUpdated = await UpdateUserService({ userData, userId });
+    await UpdateUserService({ userData, userId });
 
-    await userUpdated.$set("queues", queueIds);
+    await user.$set("queues", queueIds);
 
-    await userUpdated.reload();
+    await user.reload();
 
-    return SerializeUser(userUpdated);
+    return SerializeUser(user);
   }
 };
 
