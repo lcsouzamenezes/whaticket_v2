@@ -1,8 +1,9 @@
 import * as Yup from "yup";
 
-import AppError from "../../validations/config/AppError";
 import Whatsapp from "../../models/Whatsapp";
 import AssociateWhatsappQueue from "./AssociateWhatsappQueue";
+
+import AppError from "../../validations/config/AppError";
 
 interface Request {
   name: string;

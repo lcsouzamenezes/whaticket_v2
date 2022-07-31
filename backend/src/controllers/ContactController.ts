@@ -2,14 +2,16 @@ import * as Yup from "yup";
 import { Request, Response } from "express";
 import { getIO } from "../libs/socket";
 
-import ListContactsService from "../services/ContactServices/ListContactsService";
-import CreateContactService from "../services/ContactServices/CreateContactService";
-import ShowContactService from "../services/ContactServices/ShowContactService";
-import UpdateContactService from "../services/ContactServices/UpdateContactService";
-import DeleteContactService from "../services/ContactServices/DeleteContactService";
+import {
+  ListContactsService,
+  CreateContactService,
+  ShowContactService,
+  UpdateContactService,
+  DeleteContactService,
+  CheckIsValidContact,
+  GetProfilePicUrl
+} from "../services";
 
-import CheckIsValidContact from "../services/WbotServices/CheckIsValidContact";
-import GetProfilePicUrl from "../services/WbotServices/GetProfilePicUrl";
 import AppError from "../validations/config/AppError";
 
 type IndexQuery = {

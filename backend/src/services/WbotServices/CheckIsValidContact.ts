@@ -1,6 +1,7 @@
-import AppError from "../../validations/config/AppError";
-import GetDefaultWhatsApp from "../../helpers/GetDefaultWhatsApp";
 import { getWbot } from "../../libs/wbot";
+
+import GetDefaultWhatsApp from "../../helpers/GetDefaultWhatsApp";
+import AppError from "../../validations/config/AppError";
 
 const CheckIsValidContact = async (number: string): Promise<void> => {
   const defaultWhatsapp = await GetDefaultWhatsApp();
