@@ -14,11 +14,13 @@ import Ticket from "../../models/Ticket";
 import Contact from "../../models/Contact";
 import Message from "../../models/Message";
 
-import UpdateTicketService from "../TicketServices/UpdateTicketService";
-import ShowWhatsAppService from "../WhatsappService/ShowWhatsAppService";
-import CreateMessageService from "../MessageServices/CreateMessageService";
-import FindOrCreateTicketService from "../TicketServices/FindOrCreateTicketService";
-import CreateOrUpdateContactService from "../ContactServices/CreateOrUpdateContactService";
+import {
+  UpdateTicketService,
+  ShowWhatsAppService,
+  CreateMessageService,
+  FindOrCreateTicketService,
+  CreateOrUpdateContactService
+} from "../index";
 
 import { getIO } from "../../libs/socket";
 import { logger } from "../../utils/logger";

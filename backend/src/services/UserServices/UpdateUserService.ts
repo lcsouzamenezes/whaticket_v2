@@ -1,4 +1,4 @@
-import ShowUserService from "./ShowUserService";
+import { ShowUserService } from "../index";
 
 interface UserData {
   email?: string;

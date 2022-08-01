@@ -6,8 +6,8 @@ import {
   Model,
   ForeignKey
 } from "sequelize-typescript";
-import Queue from "./Queue";
-import User from "./User";
+
+import { Queue, User } from "./index";
 
 @Table
 class UserQueue extends Model<UserQueue> {

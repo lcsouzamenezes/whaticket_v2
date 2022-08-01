@@ -12,11 +12,7 @@ import {
   Default
 } from "sequelize-typescript";
 
-import Contact from "./Contact";
-import Message from "./Message";
-import Queue from "./Queue";
-import User from "./User";
-import Whatsapp from "./Whatsapp";
+import { User, Contact, Message, Queue, Whatsapp } from "./index";
 
 @Table
 class Ticket extends Model<Ticket> {

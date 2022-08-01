@@ -10,7 +10,8 @@ import {
   ForeignKey,
   BelongsTo
 } from "sequelize-typescript";
-import User from "./User";
+
+import { User } from "./index";
 
 @Table
 class QuickAnswer extends Model<QuickAnswer> {

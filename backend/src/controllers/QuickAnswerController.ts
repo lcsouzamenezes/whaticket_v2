@@ -2,11 +2,13 @@ import * as Yup from "yup";
 import { Request, Response } from "express";
 import { getIO } from "../libs/socket";
 
-import ListQuickAnswerService from "../services/QuickAnswerService/ListQuickAnswerService";
-import CreateQuickAnswerService from "../services/QuickAnswerService/CreateQuickAnswerService";
-import ShowQuickAnswerService from "../services/QuickAnswerService/ShowQuickAnswerService";
-import UpdateQuickAnswerService from "../services/QuickAnswerService/UpdateQuickAnswerService";
-import DeleteQuickAnswerService from "../services/QuickAnswerService/DeleteQuickAnswerService";
+import {
+  ListQuickAnswerService,
+  ShowQuickAnswerService,
+  CreateQuickAnswerService,
+  UpdateQuickAnswerService,
+  DeleteQuickAnswerService
+} from "../services";
 
 import AppError from "../validations/config/AppError";
 

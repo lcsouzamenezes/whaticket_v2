@@ -1,13 +1,15 @@
 import { Request, Response } from "express";
 import { getIO } from "../libs/socket";
 
-import CreateTicketService from "../services/TicketServices/CreateTicketService";
-import DeleteTicketService from "../services/TicketServices/DeleteTicketService";
-import ListTicketsService from "../services/TicketServices/ListTicketsService";
-import ShowTicketService from "../services/TicketServices/ShowTicketService";
-import UpdateTicketService from "../services/TicketServices/UpdateTicketService";
-import SendWhatsAppMessage from "../services/WbotServices/SendWhatsAppMessage";
-import ShowWhatsAppService from "../services/WhatsappService/ShowWhatsAppService";
+import {
+  CreateTicketService,
+  DeleteTicketService,
+  ListTicketsService,
+  ShowTicketService,
+  UpdateTicketService,
+  SendWhatsAppMessage,
+  ShowWhatsAppService
+} from "../services";
 
 type IndexQuery = {
   searchParam: string;

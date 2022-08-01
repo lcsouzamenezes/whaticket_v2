@@ -1,5 +1,5 @@
-import AppError from "../../validations/config/AppError";
 import Queue from "../../models/Queue";
+import AppError from "../../validations/config/AppError";
 
 const ShowQueueService = async (queueId: number | string): Promise<Queue> => {
   const queue = await Queue.findByPk(queueId);

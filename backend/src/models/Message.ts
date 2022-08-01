@@ -10,8 +10,8 @@ import {
   BelongsTo,
   ForeignKey
 } from "sequelize-typescript";
-import Contact from "./Contact";
-import Ticket from "./Ticket";
+
+import { Contact, Ticket } from "./index";
 
 @Table
 class Message extends Model<Message> {

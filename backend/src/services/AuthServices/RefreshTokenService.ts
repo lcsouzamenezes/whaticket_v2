@@ -1,14 +1,16 @@
 import { verify } from "jsonwebtoken";
 import { Response as Res } from "express";
 
-import User from "../../models/User";
-import AppError from "../../validations/config/AppError";
-import ShowUserService from "../UserServices/ShowUserService";
 import authConfig from "../../config/auth";
+import User from "../../models/User";
+import { ShowUserService } from "../index";
+
 import {
   createAccessToken,
   createRefreshToken
 } from "../../helpers/CreateTokens";
+
+import AppError from "../../validations/config/AppError";
 
 interface RefreshTokenPayload {
   id: string;
