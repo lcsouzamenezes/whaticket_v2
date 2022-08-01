@@ -9,7 +9,8 @@ import {
   ForeignKey,
   BelongsTo
 } from "sequelize-typescript";
-import Contact from "./Contact";
+
+import { Contact } from "./index";
 
 @Table
 class ContactCustomField extends Model<ContactCustomField> {

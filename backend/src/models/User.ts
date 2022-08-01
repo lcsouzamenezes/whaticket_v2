@@ -13,12 +13,10 @@ import {
   HasMany,
   BelongsToMany
 } from "sequelize-typescript";
+
 import { hash, compare } from "bcryptjs";
-import Ticket from "./Ticket";
-import Queue from "./Queue";
-import UserQueue from "./UserQueue";
-import Whatsapp from "./Whatsapp";
-import QuickAnswer from "./QuickAnswer";
+
+import { UserQueue, Ticket, QuickAnswer, Queue, Whatsapp } from "./index";
 
 @Table
 class User extends Model<User> {
