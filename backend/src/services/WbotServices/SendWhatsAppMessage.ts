@@ -1,10 +1,13 @@
 import { Message as WbotMessage } from "whatsapp-web.js";
-import AppError from "../../validations/config/AppError";
+
+import Message from "../../models/Message";
+import Ticket from "../../models/Ticket";
+
 import GetTicketWbot from "../../helpers/GetTicketWbot";
 import GetWbotMessage from "../../helpers/GetWbotMessage";
 import SerializeWbotMsgId from "../../helpers/SerializeWbotMsgId";
-import Message from "../../models/Message";
-import Ticket from "../../models/Ticket";
+
+import AppError from "../../validations/config/AppError";
 
 interface Request {
   body: string;

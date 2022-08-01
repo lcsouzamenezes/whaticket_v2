@@ -1,8 +1,10 @@
-import AppError from "../../validations/config/AppError";
+import Ticket from "../../models/Ticket";
+
+import { ShowContactService } from "../index";
+
 import CheckContactOpenTickets from "../../helpers/CheckContactOpenTickets";
 import GetDefaultWhatsApp from "../../helpers/GetDefaultWhatsApp";
-import Ticket from "../../models/Ticket";
-import ShowContactService from "../ContactServices/ShowContactService";
+import AppError from "../../validations/config/AppError";
 
 interface Request {
   contactId: number;

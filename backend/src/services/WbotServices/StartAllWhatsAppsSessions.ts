@@ -1,4 +1,4 @@
-import ListWhatsAppsService from "../WhatsappService/ListWhatsAppsService";
+import { ListWhatsAppsService } from "../index";
 import { StartWhatsAppSession } from "./StartWhatsAppSession";
 
 export const StartAllWhatsAppsSessions = async (): Promise<void> => {

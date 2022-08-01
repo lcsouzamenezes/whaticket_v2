@@ -1,11 +1,13 @@
 import { Request, Response } from "express";
 import { getIO } from "../libs/socket";
 
-import CreateUserService from "../services/UserServices/CreateUserService";
-import ListUsersService from "../services/UserServices/ListUsersService";
-import ShowUserService from "../services/UserServices/ShowUserService";
-import UpdateUserService from "../services/UserServices/UpdateUserService";
-import DeleteUserService from "../services/UserServices/DeleteUserService";
+import {
+  ListUsersService,
+  ShowUserService,
+  CreateUserService,
+  UpdateUserService,
+  DeleteUserService
+} from "../services";
 
 import HttpStatus from "../validations/config/HttpStatus";
 

@@ -1,7 +1,7 @@
 import { SerializeUser } from "../../helpers/SerializeUser";
 
 import User from "../../models/User";
-import UpdateUserService from "./UpdateUserService";
+import { UpdateUserService } from "../index";
 
 interface Request {
   name: string;

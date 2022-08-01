@@ -1,5 +1,5 @@
-import AppError from "../../validations/config/AppError";
 import Contact from "../../models/Contact";
+import AppError from "../../validations/config/AppError";
 
 interface ExtraInfo {
   name: string;

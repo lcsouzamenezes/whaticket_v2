@@ -1,6 +1,8 @@
-import GetDefaultWhatsApp from "../../helpers/GetDefaultWhatsApp";
 import { getWbot } from "../../libs/wbot";
+
 import Contact from "../../models/Contact";
+
+import GetDefaultWhatsApp from "../../helpers/GetDefaultWhatsApp";
 import { logger } from "../../utils/logger";
 
 const ImportContactsService = async (): Promise<void> => {
