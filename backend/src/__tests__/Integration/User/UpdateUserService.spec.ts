@@ -1,8 +1,8 @@
-import faker from "faker";
-import AppError from "../../../validations/config/AppError";
-import CreateUserService from "../../../services/UserServices/CreateUserService";
-import UpdateUserService from "../../../services/UserServices/UpdateUserService";
+import { faker } from "@faker-js/faker";
+
+import { UpdateUserService, CreateUserService } from "../../../services";
 import { disconnect, truncate } from "../../utils/database";
+import AppError from "../../../validations/config/AppError";
 
 describe("User", () => {
   beforeEach(async () => {
@@ -19,7 +19,7 @@ describe("User", () => {
 
   it("should be able to find a user", async () => {
     const newUser = await CreateUserService({
-      name: faker.name.findName(),
+      name: faker.name.fullName(),
       email: faker.internet.email(),
       password: faker.internet.password()
     });
@@ -37,9 +37,9 @@ describe("User", () => {
   });
 
   it("should not be able to updated a inexisting user", async () => {
-    const userId = faker.random.number();
+    const userId = faker.random.numeric();
     const userData = {
-      name: faker.name.findName(),
+      name: faker.name.fullName(),
       email: faker.internet.email()
     };
 
@@ -50,14 +50,14 @@ describe("User", () => {
 
   it("should not be able to updated an user with invalid data", async () => {
     const newUser = await CreateUserService({
-      name: faker.name.findName(),
+      name: faker.name.fullName(),
       email: faker.internet.email(),
       password: faker.internet.password()
     });
 
     const userId = newUser.id;
     const userData = {
-      name: faker.name.findName(),
+      name: faker.name.fullName(),
       email: "test.worgn.email"
     };
 

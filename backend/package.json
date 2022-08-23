@@ -4,13 +4,13 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "tsc",
-    "watch": "tsc -w",
+    "build": "rimraf dist/ && tsc",
+    "watch": "rimraf dist/ && tsc -w",
     "start": "nodemon dist/server.js",
     "dev:server": "ts-node-dev --respawn --transpile-only --ignore node_modules src/server.ts",
-    "pretest": "NODE_ENV=test sequelize db:migrate && NODE_ENV=test sequelize db:seed:all",
-    "test": "NODE_ENV=test jest",
-    "posttest": "NODE_ENV=test sequelize db:migrate:undo:all"
+    "test": "cross-env NODE_ENV=test jest --passWithNoTests --runInBand --no-cache",
+    "pretest": "cross-env NODE_ENV=test sequelize db:migrate",
+    "posttest": "cross-env NODE_ENV=test sequelize db:migrate:undo:all"
   },
   "author": "",
   "license": "MIT",
@@ -41,6 +41,7 @@
     "yup": "^0.32.8"
   },
   "devDependencies": {
+    "@faker-js/faker": "^7.4.0",
     "@types/bcryptjs": "^2.4.2",
     "@types/bluebird": "^3.5.32",
     "@types/cookie-parser": "^1.4.2",
@@ -59,6 +60,7 @@
     "@types/yup": "^0.29.8",
     "@typescript-eslint/eslint-plugin": "^4.4.0",
     "@typescript-eslint/parser": "^4.4.0",
+    "cross-env": "^7.0.3",
     "eslint": "^7.10.0",
     "eslint-config-airbnb-base": "^14.2.0",
     "eslint-config-prettier": "^6.12.0",
@@ -70,6 +72,7 @@
     "jest": "^26.6.0",
     "nodemon": "^2.0.4",
     "prettier": "^2.1.2",
+    "sqlite3": "^5.0.11",
     "supertest": "^5.0.0",
     "ts-jest": "^26.4.1",
     "ts-node-dev": "^1.0.0-pre.63",
