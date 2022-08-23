@@ -1,8 +1,8 @@
-import faker from "faker";
-import AppError from "../../../validations/config/AppError";
-import AuthUserService from "../../../services/UserServices/AuthUserService";
-import CreateUserService from "../../../services/UserServices/CreateUserService";
+import { faker } from "@faker-js/faker";
+
+import { AuthUserService, CreateUserService } from "../../../services";
 import { disconnect, truncate } from "../../utils/database";
+import AppError from "../../../validations/config/AppError";
 
 describe("Auth", () => {
   beforeEach(async () => {
@@ -22,7 +22,7 @@ describe("Auth", () => {
     const email = faker.internet.email();
 
     await CreateUserService({
-      name: faker.name.findName(),
+      name: faker.name.fullName(),
       email,
       password
     });
@@ -50,7 +50,7 @@ describe("Auth", () => {
 
   it("should not be able to login with incorret password", async () => {
     await CreateUserService({
-      name: faker.name.findName(),
+      name: faker.name.fullName(),
       email: "mail@test.com",
       password: faker.internet.password()
     });

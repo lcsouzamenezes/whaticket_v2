@@ -41,7 +41,6 @@ describe("User", () => {
       });
     } catch (err) {
       expect(err).toBeInstanceOf(AppError);
-      expect(err.statusCode).toBe(400);
     }
   });
 });

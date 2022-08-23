@@ -6,7 +6,8 @@ module.exports = {
     collate: "utf8mb4_bin"
   },
   dialect: process.env.DB_DIALECT || "mysql",
-  timezone: "-03:00",
+  // timezone: process.env.DB_TIMEZONE || "America/Sao_Paulo", // comment for tests
+  storage: process.env.DB_STORAGE,
   host: process.env.DB_HOST,
   database: process.env.DB_NAME,
   username: process.env.DB_USER,
