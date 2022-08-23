@@ -1,8 +1,8 @@
-import faker from "faker";
-import AppError from "../../../validations/config/AppError";
-import CreateUserService from "../../../services/UserServices/CreateUserService";
-import DeleteUserService from "../../../services/UserServices/DeleteUserService";
+import { faker } from "@faker-js/faker";
+
+import { DeleteUserService, CreateUserService } from "../../../services";
 import { disconnect, truncate } from "../../utils/database";
+import AppError from "../../../validations/config/AppError";
 
 describe("User", () => {
   beforeEach(async () => {
@@ -19,7 +19,7 @@ describe("User", () => {
 
   it("should be delete a existing user", async () => {
     const { id } = await CreateUserService({
-      name: faker.name.findName(),
+      name: faker.name.fullName(),
       email: faker.internet.email(),
       password: faker.internet.password()
     });
@@ -28,7 +28,7 @@ describe("User", () => {
   });
 
   it("to throw an error if tries to delete a non existing user", async () => {
-    expect(DeleteUserService(faker.random.number())).rejects.toBeInstanceOf(
+    expect(DeleteUserService(faker.random.numeric())).rejects.toBeInstanceOf(
       AppError
     );
   });
