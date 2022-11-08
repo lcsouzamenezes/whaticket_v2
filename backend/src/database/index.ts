@@ -16,8 +16,6 @@ import {
 // eslint-disable-next-line
 const dbConfig = require("../config/database");
 
-const sequelize = new Sequelize(dbConfig);
-
 const models = [
   User,
   Contact,
@@ -30,6 +28,8 @@ const models = [
   UserQueue,
   QuickAnswer
 ];
+
+const sequelize = new Sequelize(dbConfig);
 
 sequelize.addModels(models);
 
