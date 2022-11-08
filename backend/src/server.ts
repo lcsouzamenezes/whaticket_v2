@@ -6,7 +6,7 @@ import { StartAllWhatsAppsSessions } from "./services/WbotServices/StartAllWhats
 
 const date = new Date().toISOString().slice(0, 10);
 const hour = new Date().toLocaleTimeString("pt-BR", {
-  timeZone: "America/Sao_Paulo"
+  timeZone: process.env.DB_TIMEZONE || "America/Sao_Paulo"
 });
 const dateNow = `${date} ${hour}`;
 
