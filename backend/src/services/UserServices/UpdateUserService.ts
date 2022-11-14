@@ -1,14 +1,11 @@
-import * as Yup from "yup";
-
-import AppError from "../../errors/AppError";
-import ShowUserService from "./ShowUserService";
+import { ShowUserService } from "../index";
 
 interface UserData {
   email?: string;
   password?: string;
   name?: string;
   profile?: string;
-  customer?: any;
+  customer?: string;
   queueIds?: number[];
 }
 
@@ -22,7 +19,7 @@ interface Response {
   name: string;
   email: string;
   profile: string;
-  customer: any;
+  customer: string;
 }
 
 const UpdateUserService = async ({
@@ -31,20 +28,7 @@ const UpdateUserService = async ({
 }: Request): Promise<Response | undefined> => {
   const user = await ShowUserService(userId);
 
-  const schema = Yup.object().shape({
-    name: Yup.string().min(2),
-    email: Yup.string().email(),
-    profile: Yup.string(),
-    password: Yup.string()
-  });
-
   const { name, email, password, profile, customer, queueIds = [] } = userData;
-
-  try {
-    await schema.validate({ name, email, password, profile });
-  } catch (err) {
-    throw new AppError(err.message);
-  }
 
   await user.update({
     name,

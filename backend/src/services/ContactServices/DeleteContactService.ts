@@ -1,5 +1,5 @@
 import Contact from "../../models/Contact";
-import AppError from "../../errors/AppError";
+import AppError from "../../validations/config/AppError";
 
 const DeleteContactService = async (id: string): Promise<void> => {
   const contact = await Contact.findOne({

@@ -15,3 +15,7 @@ yarn-error.log
 # Ignore test-related files
 /coverage.data
 /coverage/
+src/**/*.sqlite
+
+#Ignone cache files
+/*-cache

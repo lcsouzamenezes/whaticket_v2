@@ -1,5 +1,5 @@
 import QuickAnswer from "../../models/QuickAnswer";
-import AppError from "../../errors/AppError";
+import AppError from "../../validations/config/AppError";
 
 const DeleteQuickAnswerService = async (id: string): Promise<void> => {
   const quickAnswer = await QuickAnswer.findOne({

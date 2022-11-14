@@ -15,10 +15,8 @@ import {
   BelongsTo,
   ForeignKey
 } from "sequelize-typescript";
-import Queue from "./Queue";
-import Ticket from "./Ticket";
-import User from "./User";
-import WhatsappQueue from "./WhatsappQueue";
+
+import { Queue, User, Ticket, WhatsappQueue } from "./index";
 
 @Table
 class Whatsapp extends Model<Whatsapp> {

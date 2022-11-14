@@ -1,7 +1,6 @@
 import { Sequelize, Op } from "sequelize";
 import Contact from "../../models/Contact";
 import Ticket from "../../models/Ticket";
-import User from "../../models/User";
 
 interface Request {
   searchParam?: string;

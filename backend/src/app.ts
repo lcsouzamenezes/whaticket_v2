@@ -1,4 +1,3 @@
-import "./bootstrap";
 import "reflect-metadata";
 import "express-async-errors";
 import express, { Request, Response, NextFunction } from "express";
@@ -6,11 +5,12 @@ import cors from "cors";
 import cookieParser from "cookie-parser";
 import * as Sentry from "@sentry/node";
 
+import "./bootstrap";
 import "./database";
-import uploadConfig from "./config/upload";
-import AppError from "./errors/AppError";
 import routes from "./routes";
 import { logger } from "./utils/logger";
+import uploadConfig from "./config/upload";
+import AppError from "./validations/config/AppError";
 
 Sentry.init({ dsn: process.env.SENTRY_DSN });
 

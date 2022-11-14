@@ -1,9 +1,9 @@
-import express from "express";
-import isAuth from "../middleware/isAuth";
+import { Router } from "express";
 
 import * as QuickAnswerController from "../controllers/QuickAnswerController";
+import isAuth from "../middleware/isAuth";
 
-const quickAnswerRoutes = express.Router();
+const quickAnswerRoutes = Router();
 
 quickAnswerRoutes.get("/quickAnswers", isAuth, QuickAnswerController.index);
 

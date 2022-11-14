@@ -1,10 +1,10 @@
+import { getIO } from "../../libs/socket";
+
+import Ticket from "../../models/Ticket";
+import { ShowTicketService } from "../index";
+
 import CheckContactOpenTickets from "../../helpers/CheckContactOpenTickets";
 import SetTicketMessagesAsRead from "../../helpers/SetTicketMessagesAsRead";
-import { getIO } from "../../libs/socket";
-import Ticket from "../../models/Ticket";
-import SendWhatsAppMessage from "../WbotServices/SendWhatsAppMessage";
-import ShowWhatsAppService from "../WhatsappService/ShowWhatsAppService";
-import ShowTicketService from "./ShowTicketService";
 
 interface TicketData {
   status?: string;
@@ -45,8 +45,6 @@ const UpdateTicketService = async ({
     userId
   });
 
-
-
   await ticket.reload();
 
   const io = getIO();
@@ -57,8 +55,6 @@ const UpdateTicketService = async ({
       ticketId: ticket.id
     });
   }
-
-
 
   io.to(ticket.status)
     .to("notification")

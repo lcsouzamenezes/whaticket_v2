@@ -1,9 +1,9 @@
 import { Request, Response } from "express";
-import AppError from "../errors/AppError";
 
-import AuthUserService from "../services/UserServices/AuthUserService";
+import { AuthUserService, RefreshTokenService } from "../services";
+
 import { SendRefreshToken } from "../helpers/SendRefreshToken";
-import { RefreshTokenService } from "../services/AuthServices/RefreshTokenService";
+import AppError from "../validations/config/AppError";
 
 export const store = async (req: Request, res: Response): Promise<Response> => {
   const { email, password } = req.body;

@@ -1,6 +1,6 @@
-import AppError from "../../errors/AppError";
 import Contact from "../../models/Contact";
 import ContactCustomField from "../../models/ContactCustomField";
+import AppError from "../../validations/config/AppError";
 
 interface ExtraInfo {
   id?: number;

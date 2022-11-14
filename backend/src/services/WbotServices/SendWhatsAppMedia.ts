@@ -1,8 +1,10 @@
 import fs from "fs";
 import { MessageMedia, Message as WbotMessage } from "whatsapp-web.js";
-import AppError from "../../errors/AppError";
-import GetTicketWbot from "../../helpers/GetTicketWbot";
+
 import Ticket from "../../models/Ticket";
+
+import GetTicketWbot from "../../helpers/GetTicketWbot";
+import AppError from "../../validations/config/AppError";
 
 interface Request {
   media: Express.Multer.File;

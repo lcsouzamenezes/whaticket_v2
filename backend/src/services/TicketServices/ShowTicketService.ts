@@ -1,8 +1,9 @@
-import Ticket from "../../models/Ticket";
-import AppError from "../../errors/AppError";
 import Contact from "../../models/Contact";
-import User from "../../models/User";
 import Queue from "../../models/Queue";
+import Ticket from "../../models/Ticket";
+import User from "../../models/User";
+
+import AppError from "../../validations/config/AppError";
 
 const ShowTicketService = async (id: string | number): Promise<Ticket> => {
   const ticket = await Ticket.findByPk(id, {
