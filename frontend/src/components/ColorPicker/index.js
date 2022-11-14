@@ -1,6 +1,6 @@
-import { Dialog } from "@material-ui/core";
 import React, { useState } from "react";
 
+import { Dialog } from "@material-ui/core";
 import { GithubPicker } from "react-color";
 
 const ColorPicker = ({ onChange, currentColor, handleClose, open }) => {

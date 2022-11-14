@@ -2,122 +2,41 @@ import React, { useState, useContext, useEffect } from "react";
 import clsx from "clsx";
 
 import {
-  makeStyles,
+  List,
+  Menu,
   Drawer,
   AppBar,
   Toolbar,
-  List,
-  Typography,
   Divider,
   MenuItem,
-  IconButton,
-  Menu,
+  Typography,
+  IconButton
 } from "@material-ui/core";
 
-import MenuIcon from "@material-ui/icons/Menu";
-import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
-import AccountCircle from "@material-ui/icons/AccountCircle";
+import {
+  Menu as MenuIcon,
+  ChevronLeft,
+  AccountCircle
+} from "@material-ui/icons";
+
+import useStyles from "./styles";
 
 import MainListItems from "./MainListItems";
-import NotificationsPopOver from "../components/NotificationsPopOver";
 import UserModal from "../components/UserModal";
-import { AuthContext } from "../context/Auth/AuthContext";
 import BackdropLoading from "../components/BackdropLoading";
+import NotificationsPopOver from "../components/NotificationsPopOver";
+
+import { AuthContext } from "../context/Auth/AuthContext";
 import { i18n } from "../translate/i18n";
-
-const drawerWidth = 240;
-
-const useStyles = makeStyles((theme) => ({
-  root: {
-    display: "flex",
-    height: "100vh",
-    [theme.breakpoints.down("sm")]: {
-      height: "calc(100vh - 56px)",
-    },
-  },
-
-  toolbar: {
-    paddingRight: 24, // keep right padding when drawer closed
-  },
-  toolbarIcon: {
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "flex-end",
-    padding: "0 8px",
-    minHeight: "48px",
-  },
-  appBar: {
-    zIndex: theme.zIndex.drawer + 1,
-    transition: theme.transitions.create(["width", "margin"], {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen,
-    }),
-  },
-  appBarShift: {
-    marginLeft: drawerWidth,
-    width: `calc(100% - ${drawerWidth}px)`,
-    transition: theme.transitions.create(["width", "margin"], {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.enteringScreen,
-    }),
-  },
-  menuButton: {
-    marginRight: 36,
-  },
-  menuButtonHidden: {
-    display: "none",
-  },
-  title: {
-    flexGrow: 1,
-  },
-  drawerPaper: {
-    position: "relative",
-    whiteSpace: "nowrap",
-    width: drawerWidth,
-    transition: theme.transitions.create("width", {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.enteringScreen,
-    }),
-  },
-  drawerPaperClose: {
-    overflowX: "hidden",
-    transition: theme.transitions.create("width", {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen,
-    }),
-    width: theme.spacing(7),
-    [theme.breakpoints.up("sm")]: {
-      width: theme.spacing(9),
-    },
-  },
-  appBarSpacer: {
-    minHeight: "48px",
-  },
-  content: {
-    flex: 1,
-    overflow: "auto",
-  },
-  container: {
-    paddingTop: theme.spacing(4),
-    paddingBottom: theme.spacing(4),
-  },
-  paper: {
-    padding: theme.spacing(2),
-    display: "flex",
-    overflow: "auto",
-    flexDirection: "column",
-  },
-}));
 
 const LoggedInLayout = ({ children }) => {
   const classes = useStyles();
-  const [userModalOpen, setUserModalOpen] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
   const [menuOpen, setMenuOpen] = useState(false);
-  const { handleLogout, loading } = useContext(AuthContext);
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const [userModalOpen, setUserModalOpen] = useState(false);
   const [drawerVariant, setDrawerVariant] = useState("permanent");
-  const { user } = useContext(AuthContext);
+  const { handleLogout, loading, user } = useContext(AuthContext);
 
   useEffect(() => {
     if (document.body.offsetWidth > 600) {
@@ -133,7 +52,7 @@ const LoggedInLayout = ({ children }) => {
     }
   }, [drawerOpen]);
 
-  const handleMenu = (event) => {
+  const handleMenu = event => {
     setAnchorEl(event.currentTarget);
     setMenuOpen(true);
   };
@@ -172,13 +91,13 @@ const LoggedInLayout = ({ children }) => {
           paper: clsx(
             classes.drawerPaper,
             !drawerOpen && classes.drawerPaperClose
-          ),
+          )
         }}
         open={drawerOpen}
       >
         <div className={classes.toolbarIcon}>
           <IconButton onClick={() => setDrawerOpen(!drawerOpen)}>
-            <ChevronLeftIcon />
+            <ChevronLeft />
           </IconButton>
         </div>
         <Divider />
@@ -237,11 +156,11 @@ const LoggedInLayout = ({ children }) => {
               getContentAnchorEl={null}
               anchorOrigin={{
                 vertical: "bottom",
-                horizontal: "right",
+                horizontal: "right"
               }}
               transformOrigin={{
                 vertical: "top",
-                horizontal: "right",
+                horizontal: "right"
               }}
               open={menuOpen}
               onClose={handleCloseMenu}

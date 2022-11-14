@@ -12,82 +12,30 @@ import {
 
 import { Search, CheckBox, MoveToInbox } from "@material-ui/icons";
 
-import { makeStyles } from "@material-ui/core/styles";
+import useStyles from "./styles";
 
+import TicketsQueueSelect from "../TicketsQueueSelect";
 import NewTicketModal from "../NewTicketModal";
 import TicketsList from "../TicketsList";
 import TabPanel from "../TabPanel";
 
 import { i18n } from "../../translate/i18n";
 import { AuthContext } from "../../context/Auth/AuthContext";
-import TicketsQueueSelect from "../TicketsQueueSelect";
 import { Can } from "../Can";
-
-const useStyles = makeStyles(theme => ({
-  ticketsWrapper: {
-    position: "relative",
-    display: "flex",
-    height: "100%",
-    flexDirection: "column",
-    overflow: "hidden",
-    borderTopRightRadius: 0,
-    borderBottomRightRadius: 0
-  },
-
-  tabsHeader: {
-    flex: "none",
-    backgroundColor: "#eee"
-  },
-
-  tab: {
-    minWidth: 120,
-    width: 120
-  },
-
-  ticketOptionsBox: {
-    display: "flex",
-    justifyContent: "space-between",
-    alignItems: "center",
-    background: "#fafafa",
-    padding: theme.spacing(1)
-  },
-
-  serachInputWrapper: {
-    flex: 1,
-    background: "#fff",
-    display: "flex",
-    borderRadius: 40,
-    padding: 4,
-    marginRight: theme.spacing(1)
-  },
-
-  searchIcon: {
-    color: "grey",
-    marginLeft: 6,
-    marginRight: 6,
-    alignSelf: "center"
-  },
-
-  searchInput: {
-    flex: 1,
-    border: "none",
-    borderRadius: 30
-  }
-}));
 
 const TicketsManager = () => {
   const classes = useStyles();
 
+  const { user } = useContext(AuthContext);
+  const searchInputRef = useRef();
   const [searchParam, setSearchParam] = useState("");
   const [tab, setTab] = useState("open");
   const [newTicketModalOpen, setNewTicketModalOpen] = useState(false);
   const [showAllTickets, setShowAllTickets] = useState(false);
-  const searchInputRef = useRef();
-  const { user } = useContext(AuthContext);
 
   const userQueueIds = user.queues.map(q => q.id);
   const [selectedQueueIds, setSelectedQueueIds] = useState(userQueueIds || []);
-
+  
   useEffect(() => {
     if (tab === "search") {
       searchInputRef.current.focus();

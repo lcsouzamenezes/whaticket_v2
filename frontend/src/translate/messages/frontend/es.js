@@ -188,6 +188,10 @@ const messages = {
           okAdd: "Añadir",
           okEdit: "Ahorrar",
           cancel: "Cancelar"
+        },
+        toasts: {
+          success: "Cola guardada con éxito",
+          deleted: "Cola borrada con éxito"
         }
       },
       userModal: {
@@ -221,14 +225,14 @@ const messages = {
       },
       tickets: {
         toasts: {
-          deleted: "El ticket en el que estabas ha sido borrado."
+          deleted: "El ticket ha sido borrado."
         },
         notification: {
           message: "Mensaje de"
         },
         tabs: {
           open: { title: "Bandeja" },
-          closed: { title: "Resueltos" },
+          closed: { title: "Resueltos", badge: "Resuelto" },
           search: { title: "Buscar" }
         },
         search: {

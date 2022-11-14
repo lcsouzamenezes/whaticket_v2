@@ -1,23 +1,21 @@
 import React, { useState, useEffect, useReducer, useContext } from "react";
+import { useHistory } from "react-router-dom";
 import openSocket from "socket.io-client";
 import { toast } from "react-toastify";
-import { useHistory } from "react-router-dom";
 
 import {
-  Avatar,
-  Button,
   Paper,
   Table,
+  Avatar,
+  Button,
+  TableRow,
   TableBody,
   TableCell,
   TableHead,
-  TableRow,
   TextField,
   IconButton,
   InputAdornment
 } from "@material-ui/core";
-
-import { WhatsApp, Search, DeleteOutline, Edit } from "@material-ui/icons";
 
 import { makeStyles } from "@material-ui/core/styles";
 
@@ -29,11 +27,17 @@ import ContactModal from "../../components/ContactModal";
 import TableRowSkeleton from "../../components/TableRowSkeleton";
 import ConfirmationModal from "../../components/ConfirmationModal/";
 import MainHeaderButtonsWrapper from "../../components/MainHeaderButtonsWrapper";
+import {
+  Search,
+  EditButton,
+  DeleteButton,
+  WhatsAppButton
+} from "../../components/ActionButtons";
 
 import api from "../../services/api";
 import { i18n } from "../../translate/i18n";
-import toastError from "../../errors/toastError";
 import { AuthContext } from "../../context/Auth/AuthContext";
+import toastError from "../../errors/toastError";
 
 const reducer = (state, action) => {
   if (action.type === "LOAD_CONTACTS") {
@@ -94,15 +98,15 @@ const Contacts = () => {
 
   const { user } = useContext(AuthContext);
 
-  const [loading, setLoading] = useState(false);
   const [pageNumber, setPageNumber] = useState(1);
   const [searchParam, setSearchParam] = useState("");
   const [contacts, dispatch] = useReducer(reducer, []);
+  const [deletingContact, setDeletingContact] = useState(null);
   const [selectedContactId, setSelectedContactId] = useState(null);
   const [contactModalOpen, setContactModalOpen] = useState(false);
-  const [deletingContact, setDeletingContact] = useState(null);
   const [confirmOpen, setConfirmOpen] = useState(false);
   const [hasMore, setHasMore] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     dispatch({ type: "RESET" });
@@ -326,13 +330,13 @@ const Contacts = () => {
                       size="small"
                       onClick={() => handleSaveTicket(contact.id)}
                     >
-                      <WhatsApp />
+                      <WhatsAppButton />
                     </IconButton>
                     <IconButton
                       size="small"
                       onClick={() => hadleEditContact(contact.id)}
                     >
-                      <Edit />
+                      <EditButton />
                     </IconButton>
                     <Can
                       role={user.profile}
@@ -345,7 +349,7 @@ const Contacts = () => {
                             setDeletingContact(contact);
                           }}
                         >
-                          <DeleteOutline />
+                          <DeleteButton />
                         </IconButton>
                       )}
                     />
