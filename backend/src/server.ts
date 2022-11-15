@@ -1,17 +1,13 @@
 import gracefulShutdown from "http-graceful-shutdown";
-import app from "./app";
 import { initIO } from "./libs/socket";
 import { logger } from "./utils/logger";
+import { date, hour } from "./utils/dateTime";
+
+import app from "./app";
 import { StartAllWhatsAppsSessions } from "./services/WbotServices/StartAllWhatsAppsSessions";
 
-const date = new Date().toISOString().slice(0, 10);
-const hour = new Date().toLocaleTimeString("pt-BR", {
-  timeZone: process.env.DB_TIMEZONE || "America/Sao_Paulo"
-});
-const dateNow = `${date} ${hour}`;
-
 const server = app.listen(process.env.PORT, () => {
-  logger.info(`Server started on port: ${process.env.PORT} at ⌚ ${dateNow}`);
+  logger.info(`Server started on port: ${process.env.PORT} at ${date} ${hour}`);
 });
 
 initIO(server);
