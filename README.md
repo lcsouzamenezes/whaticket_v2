@@ -91,6 +91,18 @@ JWT_REFRESH_SECRET=75756756756
 
 Install backend dependencies, build app, run migrations and seeds:
 
+⚠️ For safety, run the command:
+
+```bash
+npm i --ignore-scripts puppeteer
+#or
+yarn add --ignore-scripts puppeteer
+```
+
+This command avoids the PUPPETEER error:
+
+❌ ERROR: Failed to set up Chromium r982053! Set "PUPPETEER_SKIP_DOWNLOAD" env variable to skip download.
+
 ```bash
 npm install
 npm run build
