@@ -1,4 +1,10 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, {
+  useContext,
+  useEffect,
+  useState,
+  useMemo,
+  forwardRef
+} from "react";
 import { Link as RouterLink } from "react-router-dom";
 
 import {
@@ -28,9 +34,9 @@ import { Can } from "../components/Can";
 function ListItemLink(props) {
   const { icon, primary, to, className } = props;
 
-  const renderLink = React.useMemo(
+  const renderLink = useMemo(
     () =>
-      React.forwardRef((itemProps, ref) => (
+      forwardRef((itemProps, ref) => (
         <RouterLink to={to} ref={ref} {...itemProps} />
       )),
     [to]
@@ -48,9 +54,9 @@ function ListItemLink(props) {
 
 const MainListItems = props => {
   const { drawerClose } = props;
+  const [connectionWarning, setConnectionWarning] = useState(false);
   const { whatsApps } = useContext(WhatsAppsContext);
   const { user } = useContext(AuthContext);
-  const [connectionWarning, setConnectionWarning] = useState(false);
 
   useEffect(() => {
     const delayDebounceFn = setTimeout(() => {

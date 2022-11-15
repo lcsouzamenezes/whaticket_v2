@@ -3,20 +3,19 @@ import { toast } from "react-toastify";
 import openSocket from "socket.io-client";
 
 import {
-  Button,
-  IconButton,
-  makeStyles,
   Paper,
   Table,
+  Button,
+  TableRow,
   TableBody,
   TableCell,
   TableHead,
-  TableRow,
-  InputAdornment,
-  TextField
+  TextField,
+  IconButton,
+  InputAdornment
 } from "@material-ui/core";
 
-import { Edit, DeleteOutline, Search } from "@material-ui/icons";
+import { makeStyles } from "@material-ui/core/styles";
 
 import Title from "../../components/Title";
 import MainHeader from "../../components/MainHeader";
@@ -25,19 +24,24 @@ import TableRowSkeleton from "../../components/TableRowSkeleton";
 import QuickAnswersModal from "../../components/QuickAnswersModal";
 import ConfirmationModal from "../../components/ConfirmationModal";
 import MainHeaderButtonsWrapper from "../../components/MainHeaderButtonsWrapper";
+import {
+  Search,
+  EditButton,
+  DeleteButton
+} from "../../components/ActionButtons";
 
 import api from "../../services/api";
 import { i18n } from "../../translate/i18n";
-import toastError from "../../errors/toastError";
 import { AuthContext } from "../../context/Auth/AuthContext";
+import toastError from "../../errors/toastError";
 
 const reducer = (state, action) => {
   if (action.type === "LOAD_QUICK_ANSWERS") {
     const quickAnswers = action.payload;
     const newQuickAnswers = [];
 
-    quickAnswers.forEach((quickAnswer) => {
-      const quickAnswerIndex = state.findIndex((q) => q.id === quickAnswer.id);
+    quickAnswers.forEach(quickAnswer => {
+      const quickAnswerIndex = state.findIndex(q => q.id === quickAnswer.id);
       if (quickAnswerIndex !== -1) {
         state[quickAnswerIndex] = quickAnswer;
       } else {
@@ -88,15 +92,15 @@ const QuickAnswers = () => {
   const classes = useStyles();
   const { user } = useContext(AuthContext);
 
-  const [loading, setLoading] = useState(false);
   const [pageNumber, setPageNumber] = useState(1);
   const [searchParam, setSearchParam] = useState("");
   const [quickAnswers, dispatch] = useReducer(reducer, []);
   const [selectedQuickAnswers, setSelectedQuickAnswers] = useState(null);
-  const [quickAnswersModalOpen, setQuickAnswersModalOpen] = useState(false);
   const [deletingQuickAnswers, setDeletingQuickAnswers] = useState(null);
+  const [quickAnswersModalOpen, setQuickAnswersModalOpen] = useState(false);
   const [confirmModalOpen, setConfirmModalOpen] = useState(false);
   const [hasMore, setHasMore] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     dispatch({ type: "RESET" });
@@ -271,7 +275,7 @@ const QuickAnswers = () => {
                       size="small"
                       onClick={() => handleEditQuickAnswers(quickAnswer)}
                     >
-                      <Edit />
+                      <EditButton />
                     </IconButton>
 
                     <IconButton
@@ -281,7 +285,7 @@ const QuickAnswers = () => {
                         setDeletingQuickAnswers(quickAnswer);
                       }}
                     >
-                      <DeleteOutline />
+                      <DeleteButton />
                     </IconButton>
                   </TableCell>
                 </TableRow>

@@ -1,21 +1,22 @@
 import React from "react";
-
-import { Card, Button } from "@material-ui/core";
-import { makeStyles } from "@material-ui/core/styles";
-import TicketHeaderSkeleton from "../TicketHeaderSkeleton";
-import ArrowBackIos from "@material-ui/icons/ArrowBackIos";
 import { useHistory } from "react-router-dom";
 
-const useStyles = makeStyles((theme) => ({
+import { Card, Button } from "@material-ui/core";
+import ArrowBackIos from "@material-ui/icons/ArrowBackIos";
+import { makeStyles } from "@material-ui/core/styles";
+
+import TicketHeaderSkeleton from "../TicketHeaderSkeleton";
+
+const useStyles = makeStyles(theme => ({
   ticketHeader: {
     display: "flex",
     backgroundColor: "#eee",
     flex: "none",
     borderBottom: "1px solid rgba(0, 0, 0, 0.12)",
     [theme.breakpoints.down("sm")]: {
-      flexWrap: "wrap",
-    },
-  },
+      flexWrap: "wrap"
+    }
+  }
 }));
 
 const TicketHeader = ({ loading, children }) => {

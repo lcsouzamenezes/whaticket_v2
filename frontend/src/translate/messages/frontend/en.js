@@ -1,4 +1,4 @@
-import { messages as backMessages} from "../backend/en";
+import { messages as backMessages } from "../backend/en";
 
 const messages = {
   en: {
@@ -185,6 +185,10 @@ const messages = {
           okAdd: "Add",
           okEdit: "Save",
           cancel: "Cancel"
+        },
+        toasts: {
+          success: "Queue saved successfully",
+          deleted: "Queue deleted successfully"
         }
       },
       userModal: {
@@ -218,14 +222,14 @@ const messages = {
       },
       tickets: {
         toasts: {
-          deleted: "The ticket you were on has been deleted."
+          deleted: "Ticket deleted sucessfully."
         },
         notification: {
           message: "Message from"
         },
         tabs: {
           open: { title: "Inbox" },
-          closed: { title: "Resolved" },
+          closed: { title: "Resolved", badge: "Resolved" },
           search: { title: "Search" }
         },
         search: {

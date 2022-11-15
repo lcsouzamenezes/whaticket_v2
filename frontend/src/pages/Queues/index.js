@@ -3,19 +3,19 @@ import { toast } from "react-toastify";
 import openSocket from "socket.io-client";
 
 import {
-  Button,
-  IconButton,
-  makeStyles,
+  Chip,
   Paper,
   Table,
+  Button,
+  TableRow,
   TableBody,
   TableCell,
   TableHead,
-  TableRow,
   Typography,
+  IconButton
 } from "@material-ui/core";
 
-import { DeleteOutline, Edit } from "@material-ui/icons";
+import { makeStyles } from "@material-ui/core/styles";
 
 import Title from "../../components/Title";
 import MainHeader from "../../components/MainHeader";
@@ -23,25 +23,26 @@ import QueueModal from "../../components/QueueModal";
 import MainContainer from "../../components/MainContainer";
 import TableRowSkeleton from "../../components/TableRowSkeleton";
 import ConfirmationModal from "../../components/ConfirmationModal";
+import { EditButton, DeleteButton } from "../../components/ActionButtons";
 import MainHeaderButtonsWrapper from "../../components/MainHeaderButtonsWrapper";
 
 import api from "../../services/api";
 import { i18n } from "../../translate/i18n";
-import toastError from "../../errors/toastError";
 import { AuthContext } from "../../context/Auth/AuthContext";
+import toastError from "../../errors/toastError";
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(theme => ({
   mainPaper: {
     flex: 1,
     padding: theme.spacing(1),
     overflowY: "scroll",
-    ...theme.scrollbarStyles,
+    ...theme.scrollbarStyles
   },
   customTableCell: {
     display: "flex",
     alignItems: "center",
-    justifyContent: "center",
-  },
+    justifyContent: "center"
+  }
 }));
 
 const reducer = (state, action) => {
@@ -49,8 +50,8 @@ const reducer = (state, action) => {
     const queues = action.payload;
     const newQueues = [];
 
-    queues.forEach((queue) => {
-      const queueIndex = state.findIndex((q) => q.id === queue.id);
+    queues.forEach(queue => {
+      const queueIndex = state.findIndex(q => q.id === queue.id);
       if (queueIndex !== -1) {
         state[queueIndex] = queue;
       } else {
@@ -63,7 +64,7 @@ const reducer = (state, action) => {
 
   if (action.type === "UPDATE_QUEUES") {
     const queue = action.payload;
-    const queueIndex = state.findIndex((u) => u.id === queue.id);
+    const queueIndex = state.findIndex(u => u.id === queue.id);
 
     if (queueIndex !== -1) {
       state[queueIndex] = queue;
@@ -75,7 +76,7 @@ const reducer = (state, action) => {
 
   if (action.type === "DELETE_QUEUE") {
     const queueId = action.payload;
-    const queueIndex = state.findIndex((q) => q.id === queueId);
+    const queueIndex = state.findIndex(q => q.id === queueId);
     if (queueIndex !== -1) {
       state.splice(queueIndex, 1);
     }
@@ -89,13 +90,13 @@ const reducer = (state, action) => {
 
 const Queues = () => {
   const classes = useStyles();
+  const { user } = useContext(AuthContext);
 
   const [queues, dispatch] = useReducer(reducer, []);
   const [loading, setLoading] = useState(false);
   const [queueModalOpen, setQueueModalOpen] = useState(false);
-  const [selectedQueue, setSelectedQueue] = useState(null);
   const [confirmModalOpen, setConfirmModalOpen] = useState(false);
-  const { user } = useContext(AuthContext);
+  const [selectedQueue, setSelectedQueue] = useState(null);
 
   useEffect(() => {
     (async () => {
@@ -120,7 +121,7 @@ const Queues = () => {
   useEffect(() => {
     const socket = openSocket(process.env.REACT_APP_BACKEND_URL);
 
-    socket.on("queue", (data) => {
+    socket.on("queue", data => {
       if (data.action === "update" || data.action === "create") {
         dispatch({ type: "UPDATE_QUEUES", payload: data.queue });
       }
@@ -145,7 +146,7 @@ const Queues = () => {
     setSelectedQueue(null);
   };
 
-  const handleEditQueue = (queue) => {
+  const handleEditQueue = queue => {
     setSelectedQueue(queue);
     setQueueModalOpen(true);
   };
@@ -155,10 +156,10 @@ const Queues = () => {
     setSelectedQueue(null);
   };
 
-  const handleDeleteQueue = async (queueId) => {
+  const handleDeleteQueue = async queueId => {
     try {
       await api.delete(`/queue/${queueId}`);
-      toast.success(i18n.t("Queue deleted successfully!"));
+      toast.success(i18n.t("queueModal.toasts.deleted"));
     } catch (err) {
       toastError(err);
     }
@@ -217,17 +218,17 @@ const Queues = () => {
           </TableHead>
           <TableBody>
             <>
-              {queues.map((queue) => (
+              {queues.map(queue => (
                 <TableRow key={queue.id}>
                   <TableCell align="center">{queue.name}</TableCell>
                   <TableCell align="center">
                     <div className={classes.customTableCell}>
-                      <span
+                      <Chip
                         style={{
                           backgroundColor: queue.color,
-                          width: 60,
+                          width: 50,
                           height: 20,
-                          alignSelf: "center",
+                          alignSelf: "center"
                         }}
                       />
                     </div>
@@ -248,7 +249,7 @@ const Queues = () => {
                       size="small"
                       onClick={() => handleEditQueue(queue)}
                     >
-                      <Edit />
+                      <EditButton />
                     </IconButton>
 
                     <IconButton
@@ -258,7 +259,7 @@ const Queues = () => {
                         setConfirmModalOpen(true);
                       }}
                     >
-                      <DeleteOutline />
+                      <DeleteButton />
                     </IconButton>
                   </TableCell>
                 </TableRow>

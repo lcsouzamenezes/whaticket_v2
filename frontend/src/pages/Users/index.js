@@ -3,6 +3,7 @@ import { toast } from "react-toastify";
 import openSocket from "socket.io-client";
 
 import {
+  Chip,
   Paper,
   Button,
   Table,
@@ -15,7 +16,10 @@ import {
   InputAdornment
 } from "@material-ui/core";
 
-import { Search, DeleteOutline, Edit } from "@material-ui/icons";
+import {
+  SupervisorAccountRounded as AdminIcon,
+  PersonRounded as UserIcon
+} from "@material-ui/icons";
 
 import { makeStyles } from "@material-ui/core/styles";
 
@@ -26,6 +30,11 @@ import MainContainer from "../../components/MainContainer";
 import TableRowSkeleton from "../../components/TableRowSkeleton";
 import ConfirmationModal from "../../components/ConfirmationModal";
 import MainHeaderButtonsWrapper from "../../components/MainHeaderButtonsWrapper";
+import {
+  EditButton,
+  DeleteButton,
+  Search
+} from "../../components/ActionButtons";
 
 import api from "../../services/api";
 import { AuthContext } from "../../context/Auth/AuthContext";
@@ -34,11 +43,11 @@ import toastError from "../../errors/toastError";
 
 const reducer = (state, action) => {
   if (action.type === "LOAD_USERS") {
-    const users = action.payload; 
+    const users = action.payload;
     const newUsers = [];
 
-    users.forEach((user) => {
-      const userIndex = state.findIndex((u) => u.id === user.id);
+    users.forEach(user => {
+      const userIndex = state.findIndex(u => u.id === user.id);
       if (userIndex !== -1) {
         state[userIndex] = user;
       } else {
@@ -87,17 +96,17 @@ const useStyles = makeStyles(theme => ({
 
 const Users = () => {
   const classes = useStyles();
+  const { user } = useContext(AuthContext);
 
-  const [loading, setLoading] = useState(false);
-  const [pageNumber, setPageNumber] = useState(1);
-  const [hasMore, setHasMore] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
   const [deletingUser, setDeletingUser] = useState(null);
-  const [userModalOpen, setUserModalOpen] = useState(false);
   const [confirmModalOpen, setConfirmModalOpen] = useState(false);
+  const [userModalOpen, setUserModalOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [hasMore, setHasMore] = useState(false);
+  const [pageNumber, setPageNumber] = useState(1);
   const [searchParam, setSearchParam] = useState("");
   const [users, dispatch] = useReducer(reducer, []);
-  const { user } = useContext(AuthContext);
 
   useEffect(() => {
     dispatch({ type: "RESET" });
@@ -115,9 +124,9 @@ const Users = () => {
           const users = data.users.filter(users => {
             return user?.customer === "master"
               ? users
-              : users?.name === user?.name || 
-                users?.email === user?.email || 
-                users?.customer === user?.id.toString();
+              : users?.name === user?.name ||
+                  users?.email === user?.email ||
+                  users?.customer === user?.id.toString();
           });
           dispatch({ type: "LOAD_USERS", payload: users });
           setHasMore(data.hasMore);
@@ -246,9 +255,7 @@ const Users = () => {
         <Table size="small">
           <TableHead>
             <TableRow>
-              <TableCell align="center">
-                {i18n.t("users.table.name")}
-              </TableCell>
+              <TableCell align="center">{i18n.t("users.table.name")}</TableCell>
               <TableCell align="center">
                 {i18n.t("users.table.email")}
               </TableCell>
@@ -262,19 +269,33 @@ const Users = () => {
           </TableHead>
           <TableBody>
             <>
-              {users.map((user) => (
+              {users.map(user => (
                 <TableRow key={user.id}>
                   <TableCell align="center">{user.name}</TableCell>
                   <TableCell align="center">{user.email}</TableCell>
-                  <TableCell align="center">{user.profile}</TableCell>
+                  <TableCell align="center">
+                    {user.profile === "admin" ? (
+                      <Chip
+                        icon={<AdminIcon />}
+                        color="primary"
+                        label={user.profile}
+                      />
+                    ) : (
+                      <Chip
+                        icon={<UserIcon />}
+                        variant="outlined"
+                        color="primary"
+                        label={user.profile}
+                      />
+                    )}
+                  </TableCell>
                   <TableCell align="center">
                     <IconButton
                       size="small"
                       onClick={() => handleEditUser(user)}
                     >
-                      <Edit />
+                      <EditButton />
                     </IconButton>
-
                     <IconButton
                       size="small"
                       onClick={e => {
@@ -282,7 +303,7 @@ const Users = () => {
                         setDeletingUser(user);
                       }}
                     >
-                      <DeleteOutline />
+                      <DeleteButton />
                     </IconButton>
                   </TableCell>
                 </TableRow>

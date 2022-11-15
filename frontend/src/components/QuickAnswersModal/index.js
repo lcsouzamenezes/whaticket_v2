@@ -1,61 +1,25 @@
 import React, { useState, useEffect, useRef, useContext } from "react";
-import * as Yup from "yup";
 import { Formik, Form, Field } from "formik";
 import { toast } from "react-toastify";
 
 import {
-  makeStyles,
   Button,
-  TextField,
   Dialog,
+  TextField,
+  DialogTitle,
   DialogActions,
   DialogContent,
-  DialogTitle,
   CircularProgress,
 } from "@material-ui/core";
-import { green } from "@material-ui/core/colors";
+
+import useStyles from "./styles";
+
+import quickAnswerSchema from "../../validations/schemas/QuickAnswerSchema";
 
 import api from "../../services/api";
-import { AuthContext } from "../../context/Auth/AuthContext";
 import { i18n } from "../../translate/i18n";
+import { AuthContext } from "../../context/Auth/AuthContext";
 import toastError from "../../errors/toastError";
-
-const useStyles = makeStyles((theme) => ({
-  root: {
-    flexWrap: "wrap",
-  },
-  textField: {
-    marginRight: theme.spacing(1),
-    width: "100%",
-  },
-
-  btnWrapper: {
-    position: "relative",
-  },
-
-  buttonProgress: {
-    color: green[500],
-    position: "absolute",
-    top: "50%",
-    left: "50%",
-    marginTop: -12,
-    marginLeft: -12,
-  },
-  textQuickAnswerContainer: {
-    width: "100%",
-  },
-}));
-
-const QuickAnswerSchema = Yup.object().shape({
-  shortcut: Yup.string()
-    .min(2, "Too Short!")
-    .max(15, "Too Long!")
-    .required("Required"),
-  message: Yup.string()
-    .min(8, "Too Short!")
-    .max(30000, "Too Long!")
-    .required("Required"),
-});
 
 const QuickAnswersModal = ({
   open,
@@ -145,7 +109,7 @@ const QuickAnswersModal = ({
         <Formik
           initialValues={quickAnswer}
           enableReinitialize={true}
-          validationSchema={QuickAnswerSchema}
+          validationSchema={quickAnswerSchema}
           onSubmit={(values, actions) => {
             setTimeout(() => {
               handleSaveQuickAnswer(values);

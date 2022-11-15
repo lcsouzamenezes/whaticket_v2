@@ -187,6 +187,10 @@ const messages = {
           okAdd: "Adicionar",
           okEdit: "Salvar",
           cancel: "Cancelar"
+        },
+        toasts: {
+          success: "Fila salva com sucesso",
+          deleted: "Fila deletada com sucesso"
         }
       },
       userModal: {
@@ -220,14 +224,14 @@ const messages = {
       },
       tickets: {
         toasts: {
-          deleted: "O ticket que você estava foi deletado."
+          deleted: "O ticket foi deletado."
         },
         notification: {
           message: "Mensagem de"
         },
         tabs: {
           open: { title: "Inbox" },
-          closed: { title: "Resolvidos" },
+          closed: { title: "Resolvidos", badge: "Resolvido" },
           search: { title: "Busca" }
         },
         search: {
